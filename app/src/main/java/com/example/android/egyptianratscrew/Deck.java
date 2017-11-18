@@ -45,7 +45,7 @@ public class Deck {
             // face card (jack, queen, king)
             boolean isFaceCard;
 
-            if (i >= 11) {
+            if (i >= 11 || i == 1) {
                 isFaceCard = true;
             }
             else {

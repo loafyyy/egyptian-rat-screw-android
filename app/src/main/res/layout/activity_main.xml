@@ -1,143 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="16dp"
     tools:context="com.example.android.egyptianratscrew.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/player_two_buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:rotation="180">
+
+        <ImageView
+            android:id="@+id/p2_play_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/colorAccent"
+            android:src="@android:drawable/ic_media_play" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:onClick="playerOneSlap"
-            android:text="SLAP" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:onClick="playerOnePlay"
-            android:text="PLAY" />
-
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/player_one_turn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="O"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/burn_slap"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="BURN"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/player_two_turn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="O"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-
-        <ImageView
-            android:id="@+id/player_one_card"
-            android:layout_width="80dp"
-            android:layout_height="160dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/player1card" />
-
-        <ImageView
-            android:id="@+id/middle_card"
-            android:layout_width="80dp"
-            android:layout_height="160dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/rat" />
-
-        <ImageView
-            android:id="@+id/player_two_card"
-            android:layout_width="80dp"
-            android:layout_height="160dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/player2card" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/num_cards_player_one"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="# of cards"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/num_cards_middle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="# of cards"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/num_cards_player_two"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="# of cards"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:onClick="playerTwoSlap"
             android:text="SLAP" />
 
@@ -150,4 +37,117 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/burn_slap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/num_cards_player_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal"
+        android:rotation="180"
+        android:text="26"
+        android:textSize="20sp" />
+
+
+    <RelativeLayout
+        android:id="@+id/player_cards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/rat" />
+
+        <ImageView
+            android:id="@+id/middle_card"
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/player_two_card_back"
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:rotation="180"
+            android:src="@drawable/player2card" />
+
+        <ImageView
+            android:id="@+id/player_two_card"
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:rotation="180"
+            android:src="@drawable/player2card" />
+
+        <ImageView
+            android:id="@+id/player_one_card_back"
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/player1card" />
+
+        <ImageView
+            android:id="@+id/player_one_card"
+            android:layout_width="80dp"
+            android:layout_height="160dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/player1card" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/num_cards_player_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="100dp"
+        android:text="26"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/p1_play_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/colorAccent"
+            android:src="@android:drawable/ic_media_play" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:onClick="playerOneSlap"
+            android:text="SLAP" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:onClick="playerOnePlay"
+            android:text="PLAY" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
