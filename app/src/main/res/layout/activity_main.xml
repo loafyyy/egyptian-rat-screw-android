@@ -22,6 +22,7 @@
             android:src="@android:drawable/ic_media_play" />
 
         <Button
+            android:id="@+id/p2_slap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -29,6 +30,7 @@
             android:text="SLAP" />
 
         <Button
+            android:id="@+id/p2_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -111,6 +113,25 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:onClick="reset"
+        android:text="RESET" />
+
+    <TextView
+        android:id="@+id/num_cards_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="100dp"
+        android:text="0"
+        android:textSize="20sp" />
+
     <TextView
         android:id="@+id/num_cards_player_one"
         android:layout_width="wrap_content"
@@ -135,6 +156,7 @@
             android:src="@android:drawable/ic_media_play" />
 
         <Button
+            android:id="@+id/p1_slap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -142,6 +164,7 @@
             android:text="SLAP" />
 
         <Button
+            android:id="@+id/p1_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

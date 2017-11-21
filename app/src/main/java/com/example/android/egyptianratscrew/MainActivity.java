@@ -3,10 +3,10 @@ package com.example.android.egyptianratscrew;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     // player one num of cards
     private TextView numCardsPlayerOne;
     private TextView numCardsPlayerTwo;
-    // TextView numCardsCenter;
+    private TextView numCardsCenter;
 
     // burn/slap text view
     private TextView burnSlap;
@@ -45,32 +45,17 @@ public class MainActivity extends AppCompatActivity {
     private ImageView p1PlayIndicator;
     private ImageView p2PlayIndicator;
 
+    Button p1PlayButton;
+    Button p2PlayButton;
+    Button p1SlapButton;
+    Button p2SlapButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initialize a deck of cards and shuffle
-        Deck startingDeck = new Deck();
-        startingDeck.initializeDeck();
-        startingDeck.shuffleDeck();
-
-        // create the hands/decks for two players
-        playerOne = new PlayerDeck();
-        playerTwo = new PlayerDeck();
-
-        // distribute cards to player one
-        for (int i = 0; i < 26; i++) {
-            playerOne.addCard(startingDeck.getNextCard());
-        }
-
-        // distribute cards to player two
-        for (int i = 0; i < 26; i++) {
-            playerTwo.addCard(startingDeck.getNextCard());
-        }
-
-        // initialize middle pile
-        middlePile = new MiddlePile();
+        initializeDecks();
 
         // initialize the images for the piles
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
@@ -80,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         // initialize text views that show number of cards in the piles
         numCardsPlayerOne = (TextView) findViewById(R.id.num_cards_player_one);
         numCardsPlayerTwo = (TextView) findViewById(R.id.num_cards_player_two);
-        // numCardsCenter = (TextView) findViewById(R.id.num_cards_middle);
+        numCardsCenter = (TextView) findViewById(R.id.num_cards_middle);
 
         // play indicators
         p1PlayIndicator = (ImageView) findViewById(R.id.p1_play_indicator);
@@ -89,11 +74,21 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize burn/slap text view
         burnSlap = (TextView) findViewById(R.id.burn_slap);
+
+        // initialize buttons
+        p1PlayButton = (Button) findViewById(R.id.p1_play);
+        p2PlayButton = (Button) findViewById(R.id.p2_play);
+        p1SlapButton = (Button) findViewById(R.id.p1_slap);
+        p2SlapButton = (Button) findViewById(R.id.p2_slap);
     }
 
     public void playerOneSlap(View view) {
         // if the slap was correct
         if (middlePile.shouldSlap()) {
+
+            // p1 turn
+            p1PlayIndicator.setVisibility(View.VISIBLE);
+            p2PlayIndicator.setVisibility(View.INVISIBLE);
 
             // update shouldSlap so player two cannot slap
             middlePile.shouldntSlap();
@@ -117,18 +112,28 @@ public class MainActivity extends AppCompatActivity {
             // burn player one's next card
             middlePile.burn(playerOne.playTopCard());
             moveCardToCenterBurn(playerOneImage, true);
-            burnSlap.setText("P1 BURN");
+
+            // p1 runs out of cards - player two wins
+            if (playerOne.getSize() == 0) {
+                endGame("Player Two Wins!");
+            } else {
+                burnSlap.setText("P1 BURN");
+            }
         }
 
         // update text field that display deck sizes
         numCardsPlayerOne.setText("" + playerOne.getSize());
         numCardsPlayerTwo.setText("" + playerTwo.getSize());
-        // numCardsCenter.setText("" + middlePile.getSize());
+        numCardsCenter.setText("" + middlePile.getSize());
     }
 
     public void playerTwoSlap(View view) {
         // if the slap was correct
         if (middlePile.shouldSlap()) {
+
+            // p2 turn
+            p1PlayIndicator.setVisibility(View.INVISIBLE);
+            p2PlayIndicator.setVisibility(View.VISIBLE);
 
             // update shouldSlap so player one cannot slap again
             middlePile.shouldntSlap();
@@ -149,25 +154,36 @@ public class MainActivity extends AppCompatActivity {
 
         // if the slap was incorrect
         else {
+
             // burn player two's next card
             middlePile.burn(playerTwo.playTopCard());
             moveCardToCenterBurn(playerTwoImage, false);
-            burnSlap.setText("P2 BURN");
+
+            // p2 runs out of cards - player one wins
+            if (playerTwo.getSize() == 0) {
+                endGame("Player One Wins!");
+            } else {
+                burnSlap.setText("P2 BURN");
+            }
         }
 
         // update text field that display deck sizes
         numCardsPlayerOne.setText("" + playerOne.getSize());
         numCardsPlayerTwo.setText("" + playerTwo.getSize());
-        // numCardsCenter.setText("" + middlePile.getSize());
+        numCardsCenter.setText("" + middlePile.getSize());
     }
 
     public void playerOnePlay(View view) {
+
+        burnSlap.setText("");
+
         // player one can only play when it's his/her turn
-        if (playerOne.getSize() <= 0) {
-
-        }
-
         if (playerOnePlays != 0) {
+
+            // player two wins
+            if (playerOne.getSize() <= 1) {
+                endGame("Player Two Wins!");
+            }
 
             Card nextCard = playerOne.playTopCard();
             middlePile.addCard(nextCard);
@@ -191,8 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 // ace
                 if (num == 1) {
                     playerTwoPlays += 4;
-                }
-                else {
+                } else {
                     playerTwoPlays += num - 10;
                 }
                 playerOnePlays = 0;
@@ -222,25 +237,28 @@ public class MainActivity extends AppCompatActivity {
 
                     // update boolean
                     isFCPlayerTwo = false;
-
+                    middlePile.shouldntSlap();
                 }
             }
 
             // update text field that display deck sizes
             numCardsPlayerOne.setText("" + playerOne.getSize());
             numCardsPlayerTwo.setText("" + playerTwo.getSize());
-            // numCardsCenter.setText("" + middlePile.getSize());
+            numCardsCenter.setText("" + middlePile.getSize());
         }
     }
 
     public void playerTwoPlay(View view) {
 
-        if (playerTwo.getSize() <= 0) {
-
-        }
+        burnSlap.setText("");
 
         // player two can only play when it's his/her turn
         if (playerTwoPlays != 0) {
+
+            // player one wins
+            if (playerTwo.getSize() <= 1) {
+                endGame("Player One Wins!");
+            }
 
             Card nextCard = playerTwo.playTopCard();
             middlePile.addCard(nextCard);
@@ -265,8 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 // ace
                 if (num == 1) {
                     playerOnePlays += 4;
-                }
-                else {
+                } else {
                     playerOnePlays += num - 10;
                 }
                 playerTwoPlays = 0;
@@ -296,19 +313,39 @@ public class MainActivity extends AppCompatActivity {
 
                     // update boolean
                     isFCPlayerOne = false;
+                    middlePile.shouldntSlap();
                 }
             }
 
             // update text field that display deck sizes
             numCardsPlayerOne.setText("" + playerOne.getSize());
             numCardsPlayerTwo.setText("" + playerTwo.getSize());
-            // numCardsCenter.setText("" + middlePile.getSize());
+            numCardsCenter.setText("" + middlePile.getSize());
         }
     }
 
-    private void moveCardToCenter(final View view, final int imageId, boolean playerOne) {
+    public void reset(View view) {
 
-        Log.i("toCenter", "toCenter");
+        // todo add animation
+        initializeDecks();
+        p1PlayIndicator.setVisibility(View.VISIBLE);
+        p2PlayIndicator.setVisibility(View.INVISIBLE);
+        numCardsPlayerOne.setText("" + playerOne.getSize());
+        numCardsPlayerTwo.setText("" + playerTwo.getSize());
+        numCardsCenter.setText("" + middlePile.getSize());
+        playerOnePlays = 1;
+        playerTwoPlays = 0;
+        isFCPlayerOne = false;
+        isFCPlayerTwo = false;
+        burnSlap.setText("RESET");
+        p1PlayButton.setEnabled(true);
+        p1SlapButton.setEnabled(true);
+        p2PlayButton.setEnabled(true);
+        p2SlapButton.setEnabled(true);
+        nextCardImage.setImageResource(R.drawable.rat);
+    }
+
+    private void moveCardToCenter(final View view, final int imageId, boolean playerOne) {
 
         view.bringToFront();
 
@@ -354,8 +391,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCardToCenterBurn(View view, final boolean playerOne) {
 
-        Log.i("Burn", "Burn");
-
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -381,18 +416,18 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationStart(Animation animation) {
                 nextCardImage.bringToFront();
                 // nothing in the pile
-                if  (middlePile.getSize() == 1) {
+                if (middlePile.getSize() == 1) {
                     nextCardImage.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 nextCardImage.setVisibility(View.VISIBLE);
-                if  (middlePile.getSize() == 1) {
+                if (middlePile.getSize() == 1) {
                     if (playerOne) {
                         nextCardImage.setImageResource(R.drawable.player1card);
-                    }
-                    else {
+                    } else {
                         nextCardImage.setImageResource(R.drawable.player2card);
                     }
                 }
@@ -407,8 +442,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveCardFromCenter(final boolean playerOne) {
-
-        Log.i("moveCardFromCenter", "moveCardFromCenter");
 
         DisplayMetrics dm = new DisplayMetrics();
         int cardWidth = nextCardImage.getMeasuredWidth() / 2;
@@ -429,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
         int pos = end - start;
 
         TranslateAnimation anim = new TranslateAnimation(0, pos, 0, 0);
-        anim.setDuration(500);
+        anim.setDuration(300);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -455,21 +488,37 @@ public class MainActivity extends AppCompatActivity {
         nextCardImage.startAnimation(anim);
     }
 
+    private void endGame(String msg) {
+        p1PlayButton.setEnabled(false);
+        p2PlayButton.setEnabled(false);
+        p1SlapButton.setEnabled(false);
+        p2SlapButton.setEnabled(false);
 
+        burnSlap.setText(msg);
+    }
 
-        /*
-        RelativeLayout root = (RelativeLayout) findViewById(R.id.rootLayout);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+    private void initializeDecks() {
 
-        int originalPos[] = new int[2];
-        view.getLocationOnScreen(originalPos);
+        // initialize a deck of cards and shuffle
+        Deck startingDeck = new Deck();
+        startingDeck.initializeDeck();
+        startingDeck.shuffleDeck();
 
-        int xDest = dm.widthPixels / 2;
-        int cardWidth = (view.getMeasuredWidth() / 2);
-        xDest += cardWidth;
+        // create the hands/decks for two players
+        playerOne = new PlayerDeck();
+        playerTwo = new PlayerDeck();
 
-        int start = xDest - originalPos[0];
-        int end = dm.widthPixels - originalPos[0] + cardWidth / 2; */
+        // distribute cards to player one
+        for (int i = 0; i < 26; i++) {
+            playerOne.addCard(startingDeck.getNextCard());
+        }
 
+        // distribute cards to player two
+        for (int i = 0; i < 26; i++) {
+            playerTwo.addCard(startingDeck.getNextCard());
+        }
+
+        // initialize middle pile
+        middlePile = new MiddlePile();
+    }
 }
