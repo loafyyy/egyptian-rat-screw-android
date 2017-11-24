@@ -1,5 +1,6 @@
 package com.example.android.egyptianratscrew;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -21,7 +22,7 @@ import java.util.LinkedList;
  *  Egyptian Rat Screw
  */
 
-public class PlayerDeck {
+public class PlayerDeck implements Serializable {
 
     // fieldss
     private LinkedList<Card> deck;

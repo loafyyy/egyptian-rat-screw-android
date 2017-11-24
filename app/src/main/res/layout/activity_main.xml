@@ -55,7 +55,6 @@
         android:layout_marginTop="100dp"
         android:gravity="center_horizontal"
         android:rotation="180"
-        android:text="26"
         android:textSize="20sp" />
 
 
@@ -118,9 +117,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="70dp"
         android:onClick="reset"
         android:text="RESET" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="140dp"
+        android:onClick="home"
+        android:text="HOME" />
 
     <TextView
         android:id="@+id/num_cards_middle"
@@ -129,7 +136,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="100dp"
-        android:text="0"
         android:textSize="20sp" />
 
     <TextView
@@ -139,7 +145,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="100dp"
-        android:text="26"
         android:textSize="20sp" />
 
     <RelativeLayout

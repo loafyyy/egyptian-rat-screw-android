@@ -1,14 +1,20 @@
 package com.example.android.egyptianratscrew;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,41 +27,35 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFCPlayerOne = false;
     private boolean isFCPlayerTwo = false;
 
-    // player decks
-    private PlayerDeck playerOne;
-    private PlayerDeck playerTwo;
-
-    // middle pile
+    // Decks
+    private PlayerDeck playerOne, playerTwo;
     private MiddlePile middlePile;
 
     // images for the different piles
-    private ImageView playerOneImage;
-    private ImageView playerTwoImage;
-    private ImageView nextCardImage;
+    private ImageView playerOneImage, playerTwoImage, nextCardImage;
 
-    // player one num of cards
-    private TextView numCardsPlayerOne;
-    private TextView numCardsPlayerTwo;
-    private TextView numCardsCenter;
+    // indicates how many cards left in pile
+    private TextView numCardsPlayerOne, numCardsPlayerTwo, numCardsCenter;
 
-    // burn/slap text view
+    // burn/slap/reset text view
     private TextView burnSlap;
 
-    // play indicators
-    private ImageView p1PlayIndicator;
-    private ImageView p2PlayIndicator;
+    // play indicators (whose turn it is)
+    private ImageView p1PlayIndicator, p2PlayIndicator;
 
-    Button p1PlayButton;
-    Button p2PlayButton;
-    Button p1SlapButton;
-    Button p2SlapButton;
+    private Button p1PlayButton, p2PlayButton, p1SlapButton, p2SlapButton;
+
+    private ViewGroup rootView;
+
+    private SharedPreferences sp;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeDecks();
+        gson = new Gson();
 
         // initialize the images for the piles
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
@@ -80,9 +80,22 @@ public class MainActivity extends AppCompatActivity {
         p2PlayButton = (Button) findViewById(R.id.p2_play);
         p1SlapButton = (Button) findViewById(R.id.p1_slap);
         p2SlapButton = (Button) findViewById(R.id.p2_slap);
+
+        rootView = (ViewGroup) findViewById(R.id.rootLayout);
+
+        sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        boolean newGame = getIntent().getBooleanExtra("newGame", true);
+        if (newGame) {
+            resetGame();
+            burnSlap.setText("New Game");
+        } else {
+            loadData();
+        }
     }
 
     public void playerOneSlap(View view) {
+
         // if the slap was correct
         if (middlePile.shouldSlap()) {
 
@@ -120,11 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 burnSlap.setText("P1 BURN");
             }
         }
-
-        // update text field that display deck sizes
-        numCardsPlayerOne.setText("" + playerOne.getSize());
-        numCardsPlayerTwo.setText("" + playerTwo.getSize());
-        numCardsCenter.setText("" + middlePile.getSize());
+        updateNumCards();
     }
 
     public void playerTwoSlap(View view) {
@@ -166,11 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 burnSlap.setText("P2 BURN");
             }
         }
-
-        // update text field that display deck sizes
-        numCardsPlayerOne.setText("" + playerOne.getSize());
-        numCardsPlayerTwo.setText("" + playerTwo.getSize());
-        numCardsCenter.setText("" + middlePile.getSize());
+        updateNumCards();
     }
 
     public void playerOnePlay(View view) {
@@ -187,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
 
             Card nextCard = playerOne.playTopCard();
             middlePile.addCard(nextCard);
-            int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
+            final int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
+
             moveCardToCenter(playerOneImage, resID, true);
 
             // checks if the card is a face card
@@ -242,9 +248,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // update text field that display deck sizes
-            numCardsPlayerOne.setText("" + playerOne.getSize());
-            numCardsPlayerTwo.setText("" + playerTwo.getSize());
-            numCardsCenter.setText("" + middlePile.getSize());
+            updateNumCards();
         }
     }
 
@@ -262,9 +266,8 @@ public class MainActivity extends AppCompatActivity {
 
             Card nextCard = playerTwo.playTopCard();
             middlePile.addCard(nextCard);
-            int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
+            final int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
             moveCardToCenter(playerTwoImage, resID, false);
-
 
             // checks if the card is a face card
             if (nextCard.isFaceCard()) {
@@ -318,67 +321,53 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // update text field that display deck sizes
-            numCardsPlayerOne.setText("" + playerOne.getSize());
-            numCardsPlayerTwo.setText("" + playerTwo.getSize());
-            numCardsCenter.setText("" + middlePile.getSize());
+            updateNumCards();
         }
     }
 
     public void reset(View view) {
-
         // todo add animation
-        initializeDecks();
-        p1PlayIndicator.setVisibility(View.VISIBLE);
-        p2PlayIndicator.setVisibility(View.INVISIBLE);
-        numCardsPlayerOne.setText("" + playerOne.getSize());
-        numCardsPlayerTwo.setText("" + playerTwo.getSize());
-        numCardsCenter.setText("" + middlePile.getSize());
-        playerOnePlays = 1;
-        playerTwoPlays = 0;
-        isFCPlayerOne = false;
-        isFCPlayerTwo = false;
-        burnSlap.setText("RESET");
-        p1PlayButton.setEnabled(true);
-        p1SlapButton.setEnabled(true);
-        p2PlayButton.setEnabled(true);
-        p2SlapButton.setEnabled(true);
-        nextCardImage.setImageResource(R.drawable.rat);
+        resetGame();
+    }
+
+    public void home(View view) {
+        saveData();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     private void moveCardToCenter(final View view, final int imageId, boolean playerOne) {
 
         view.bringToFront();
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int xDest = dm.widthPixels / 2;
+        int centerX = rootView.getWidth() / 2;
 
         int originalPos[] = new int[2];
         view.getLocationOnScreen(originalPos);
-        int start = originalPos[0];
+        int startX = originalPos[0];
 
-        int cardWidth = view.getMeasuredWidth() / 2;
+        int cardWidth = view.getWidth() / 2;
 
-        int end;
+        int deltaX;
         if (playerOne) {
-            end = xDest - start - cardWidth;
+            deltaX = centerX - startX - cardWidth;
         } else {
-            end = xDest - start + cardWidth;
+            deltaX = centerX - startX + cardWidth;
         }
 
-        TranslateAnimation anim = new TranslateAnimation(0, end, 0, 0);
-        anim.setDuration(200);
+        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
+        anim.setDuration(150);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                disableButtons();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 nextCardImage.setImageResource(imageId);
                 nextCardImage.bringToFront();
+                enableButtons();
             }
 
             @Override
@@ -391,27 +380,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCardToCenterBurn(View view, final boolean playerOne) {
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int xDest = dm.widthPixels / 2;
+        int centerX = rootView.getWidth() / 2;
 
         int originalPos[] = new int[2];
         view.getLocationOnScreen(originalPos);
-        int start = originalPos[0];
+        int startX = originalPos[0];
 
         int cardWidth = view.getMeasuredWidth() / 2;
 
-        int end;
+        int deltaX;
         if (playerOne) {
-            end = xDest - start - cardWidth;
+            deltaX = centerX - startX - cardWidth;
         } else {
-            end = xDest - start + cardWidth;
+            deltaX = centerX - startX + cardWidth;
         }
 
-        TranslateAnimation anim = new TranslateAnimation(0, end, 0, 0);
+        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
         anim.setDuration(200);
         anim.setAnimationListener(new Animation.AnimationListener() {
+
             @Override
             public void onAnimationStart(Animation animation) {
                 nextCardImage.bringToFront();
@@ -419,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
                 if (middlePile.getSize() == 1) {
                     nextCardImage.setVisibility(View.GONE);
                 }
+                disableButtons();
             }
 
             @Override
@@ -431,6 +419,7 @@ public class MainActivity extends AppCompatActivity {
                         nextCardImage.setImageResource(R.drawable.player2card);
                     }
                 }
+                enableButtons();
             }
 
             @Override
@@ -443,41 +432,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCardFromCenter(final boolean playerOne) {
 
-        DisplayMetrics dm = new DisplayMetrics();
-        int cardWidth = nextCardImage.getMeasuredWidth() / 2;
+        int cardWidth = nextCardImage.getWidth() / 2;
 
-        int originalPos[] = new int[2];
-        nextCardImage.getLocationOnScreen(originalPos);
-        int start = originalPos[0];
+        int startX = rootView.getWidth() / 2;
 
         int endPos[] = new int[2];
-        int end;
+        int deltaX;
         if (playerOne) {
             playerOneImage.getLocationOnScreen(endPos);
-            end = endPos[0] - cardWidth;
+            deltaX = endPos[0] - cardWidth - startX;
         } else {
             playerTwoImage.getLocationOnScreen(endPos);
-            end = endPos[0] - cardWidth;
+            deltaX = endPos[0] + cardWidth - startX;
         }
-        int pos = end - start;
 
-        TranslateAnimation anim = new TranslateAnimation(0, pos, 0, 0);
+        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
         anim.setDuration(300);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 if (playerOne) {
-                    //playerOneImage.setVisibility(View.INVISIBLE);
                     playerOneImage.bringToFront();
                 } else {
                     playerTwoImage.bringToFront();
-                    //playerTwoImage.setVisibility(View.INVISIBLE);
                 }
+                disableButtons();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 nextCardImage.setImageResource(R.drawable.rat);
+                enableButtons();
             }
 
             @Override
@@ -489,12 +474,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void endGame(String msg) {
-        p1PlayButton.setEnabled(false);
-        p2PlayButton.setEnabled(false);
-        p1SlapButton.setEnabled(false);
-        p2SlapButton.setEnabled(false);
-
+        disableButtons();
         burnSlap.setText(msg);
+    }
+
+    private void disableButtons() {
+        p1PlayButton.setClickable(false);
+        p2PlayButton.setClickable(false);
+        p1SlapButton.setClickable(false);
+        p2SlapButton.setClickable(false);
+
+    }
+
+    private void enableButtons() {
+        p1PlayButton.setClickable(true);
+        p2PlayButton.setClickable(true);
+        p1SlapButton.setClickable(true);
+        p2SlapButton.setClickable(true);
     }
 
     private void initializeDecks() {
@@ -520,5 +516,59 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize middle pile
         middlePile = new MiddlePile();
+
+        updateNumCards();
+    }
+
+    private void saveData() {
+        SharedPreferences.Editor editor = sp.edit();
+        String p1Json = gson.toJson(playerOne);
+        String p2Json = gson.toJson(playerTwo);
+        String midJson = gson.toJson(middlePile);
+        editor.putString("p1Deck", p1Json);
+        editor.putString("p2Deck", p2Json);
+        editor.putString("midDeck", midJson);
+        editor.apply();
+    }
+
+    private void loadData() {
+
+        String p1Json = sp.getString("p1Deck", null);
+        String p2Json = sp.getString("p2Deck", null);
+        String midJson = sp.getString("midDeck", null);
+
+        // json cannot be retrieved from shared preferences
+        if (p1Json == null || p2Json == null || midJson == null) {
+            Log.i("MainActivity", "Cannot get json from shared preferences");
+
+            initializeDecks();
+            return;
+        }
+
+        playerOne = gson.fromJson(p1Json, PlayerDeck.class);
+        playerTwo = gson.fromJson(p2Json, PlayerDeck.class);
+        middlePile = gson.fromJson(midJson, MiddlePile.class);
+
+        updateNumCards();
+    }
+
+    private void updateNumCards() {
+        numCardsPlayerOne.setText(Integer.toString(playerOne.getSize()));
+        numCardsPlayerTwo.setText(Integer.toString(playerTwo.getSize()));
+        numCardsCenter.setText(Integer.toString(middlePile.getSize()));
+    }
+
+    private void resetGame() {
+        initializeDecks();
+        p1PlayIndicator.setVisibility(View.VISIBLE);
+        p2PlayIndicator.setVisibility(View.INVISIBLE);
+        updateNumCards();
+        playerOnePlays = 1;
+        playerTwoPlays = 0;
+        isFCPlayerOne = false;
+        isFCPlayerTwo = false;
+        burnSlap.setText("RESET");
+        nextCardImage.setImageResource(R.drawable.rat);
+        enableButtons();
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Egyptian Rat Screw</string>
+    <string name="preference_file_key">com.example.android.egyptianratscrew.PREFERENCES</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
