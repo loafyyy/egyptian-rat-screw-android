@@ -57,7 +57,6 @@
         android:rotation="180"
         android:textSize="20sp" />
 
-
     <RelativeLayout
         android:id="@+id/player_cards"
         android:layout_width="match_parent"
@@ -65,16 +64,11 @@
         android:layout_centerVertical="true">
 
         <ImageView
+            android:id="@+id/middle_card"
             android:layout_width="80dp"
             android:layout_height="160dp"
             android:layout_centerInParent="true"
             android:src="@drawable/rat" />
-
-        <ImageView
-            android:id="@+id/middle_card"
-            android:layout_width="80dp"
-            android:layout_height="160dp"
-            android:layout_centerInParent="true" />
 
         <ImageView
             android:id="@+id/player_two_card_back"
@@ -113,21 +107,13 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/reset_button"
+        android:id="@+id/options_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp"
-        android:onClick="reset"
-        android:text="RESET" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="140dp"
-        android:onClick="home"
-        android:text="HOME" />
+        android:layout_marginBottom="50dp"
+        android:onClick="openOptions"
+        android:text="OPTIONS" />
 
     <TextView
         android:id="@+id/num_cards_middle"

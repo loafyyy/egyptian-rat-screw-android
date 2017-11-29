@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -50,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private Gson gson;
 
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         gson = new Gson();
+        mContext = this;
 
         // initialize the images for the piles
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
@@ -85,13 +89,35 @@ public class MainActivity extends AppCompatActivity {
 
         sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        boolean newGame = getIntent().getBooleanExtra("newGame", true);
+        boolean newGame = getIntent().getBooleanExtra("newGame", false);
         if (newGame) {
             resetGame();
             burnSlap.setText("New Game");
         } else {
             loadData();
         }
+    }
+
+    public void openOptions(View view) {
+        Button optionsButton = (Button) findViewById(R.id.options_button);
+        PopupMenu popup = new PopupMenu(this, optionsButton);
+        popup.getMenuInflater().inflate(R.menu.options_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        saveData();
+                        startActivity(new Intent(mContext, HomeActivity.class));
+                        return true;
+                    case R.id.reset:
+                        resetGame();
+                        return true;
+                    default:
+                        return true;
+                }
+            }
+        });
+        popup.show();
     }
 
     public void playerOneSlap(View view) {
@@ -325,17 +351,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void reset(View view) {
-        // todo add animation
-        resetGame();
-    }
-
-    public void home(View view) {
-        saveData();
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
-
     private void moveCardToCenter(final View view, final int imageId, boolean playerOne) {
 
         view.bringToFront();
@@ -539,9 +554,7 @@ public class MainActivity extends AppCompatActivity {
 
         // json cannot be retrieved from shared preferences
         if (p1Json == null || p2Json == null || midJson == null) {
-            Log.i("MainActivity", "Cannot get json from shared preferences");
-
-            initializeDecks();
+            resetGame();
             return;
         }
 
