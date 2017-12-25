@@ -27,15 +27,16 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:onClick="playerTwoSlap"
-            android:text="SLAP" />
+            android:text="@string/slap" />
 
         <Button
             android:id="@+id/p2_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:onClick="playerTwoPlay"
-            android:text="PLAY" />
+            android:text="@string/play" />
 
     </RelativeLayout>
 
@@ -75,6 +76,7 @@
             android:layout_width="80dp"
             android:layout_height="160dp"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:rotation="180"
             android:src="@drawable/player2card" />
@@ -84,6 +86,7 @@
             android:layout_width="80dp"
             android:layout_height="160dp"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:rotation="180"
             android:src="@drawable/player2card" />
@@ -92,6 +95,7 @@
             android:id="@+id/player_one_card_back"
             android:layout_width="80dp"
             android:layout_height="160dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/player1card" />
@@ -100,6 +104,7 @@
             android:id="@+id/player_one_card"
             android:layout_width="80dp"
             android:layout_height="160dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/player1card" />
@@ -113,7 +118,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
         android:onClick="openOptions"
-        android:text="OPTIONS" />
+        android:text="@string/options_menu" />
 
     <TextView
         android:id="@+id/num_cards_middle"
@@ -129,6 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="100dp"
         android:textSize="20sp" />
@@ -152,15 +158,16 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:onClick="playerOneSlap"
-            android:text="SLAP" />
+            android:text="@string/slap" />
 
         <Button
             android:id="@+id/p1_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:onClick="playerOnePlay"
-            android:text="PLAY" />
+            android:text="@string/play" />
 
     </RelativeLayout>
 

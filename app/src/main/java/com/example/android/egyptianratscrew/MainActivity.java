@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private Gson gson;
 
     private Context mContext;
+    private boolean gameEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         gson = new Gson();
         mContext = this;
+        gameEnd = false;
 
         // initialize the images for the piles
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
@@ -89,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
         sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        boolean newGame = getIntent().getBooleanExtra("newGame", false);
+        boolean newGame = getIntent().getBooleanExtra(getString(R.string.new_game_preference), false);
         if (newGame) {
             resetGame();
-            burnSlap.setText("New Game");
+            burnSlap.setText(getString(R.string.new_game));
         } else {
             loadData();
         }
@@ -111,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.reset:
                         resetGame();
+                        return true;
+                    case R.id.save:
+                        burnSlap.setText(getString(R.string.save));
+                        saveData();
                         return true;
                     default:
                         return true;
@@ -143,26 +149,27 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player one
             middlePile.emptyPile(playerOne);
             moveCardFromCenter(true);
-            burnSlap.setText("P1 SLAPS");
+            burnSlap.setText(getString(R.string.p1_slaps));
         }
 
         // if the slap was incorrect
         else {
+            // p1 runs out of cards - player two wins
+            if (playerOne.getSize() <= 1) {
+                endGame(getString(R.string.p2_wins_message));
+            } else {
+                burnSlap.setText(getString(R.string.p1_burn));
+            }
+
             // burn player one's next card
             middlePile.burn(playerOne.playTopCard());
             moveCardToCenterBurn(playerOneImage, true);
-
-            // p1 runs out of cards - player two wins
-            if (playerOne.getSize() == 0) {
-                endGame("Player Two Wins!");
-            } else {
-                burnSlap.setText("P1 BURN");
-            }
         }
         updateNumCards();
     }
 
     public void playerTwoSlap(View view) {
+
         // if the slap was correct
         if (middlePile.shouldSlap()) {
 
@@ -184,22 +191,20 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player two
             middlePile.emptyPile(playerTwo);
             moveCardFromCenter(false);
-            burnSlap.setText("P2 SLAPS");
+            burnSlap.setText(getString(R.string.p2_slaps));
         }
 
         // if the slap was incorrect
         else {
-
+            // p2 runs out of cards - player one wins
+            if (playerTwo.getSize() <= 1) {
+                endGame(getString(R.string.p1_wins_message));
+            } else {
+                burnSlap.setText(getString(R.string.p2_burn));
+            }
             // burn player two's next card
             middlePile.burn(playerTwo.playTopCard());
             moveCardToCenterBurn(playerTwoImage, false);
-
-            // p2 runs out of cards - player one wins
-            if (playerTwo.getSize() == 0) {
-                endGame("Player One Wins!");
-            } else {
-                burnSlap.setText("P2 BURN");
-            }
         }
         updateNumCards();
     }
@@ -213,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
             // player two wins
             if (playerOne.getSize() <= 1) {
-                endGame("Player Two Wins!");
+                endGame(getString(R.string.p2_wins_message));
             }
 
             Card nextCard = playerOne.playTopCard();
@@ -272,7 +277,6 @@ public class MainActivity extends AppCompatActivity {
                     middlePile.shouldntSlap();
                 }
             }
-
             // update text field that display deck sizes
             updateNumCards();
         }
@@ -287,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
             // player one wins
             if (playerTwo.getSize() <= 1) {
-                endGame("Player One Wins!");
+                endGame(getString(R.string.p1_wins_message));
             }
 
             Card nextCard = playerTwo.playTopCard();
@@ -345,7 +349,6 @@ public class MainActivity extends AppCompatActivity {
                     middlePile.shouldntSlap();
                 }
             }
-
             // update text field that display deck sizes
             updateNumCards();
         }
@@ -489,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void endGame(String msg) {
+        gameEnd = true;
         disableButtons();
         burnSlap.setText(msg);
     }
@@ -498,14 +502,15 @@ public class MainActivity extends AppCompatActivity {
         p2PlayButton.setClickable(false);
         p1SlapButton.setClickable(false);
         p2SlapButton.setClickable(false);
-
     }
 
     private void enableButtons() {
-        p1PlayButton.setClickable(true);
-        p2PlayButton.setClickable(true);
-        p1SlapButton.setClickable(true);
-        p2SlapButton.setClickable(true);
+        if (!gameEnd) {
+            p1PlayButton.setClickable(true);
+            p2PlayButton.setClickable(true);
+            p1SlapButton.setClickable(true);
+            p2SlapButton.setClickable(true);
+        }
     }
 
     private void initializeDecks() {
@@ -531,7 +536,6 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize middle pile
         middlePile = new MiddlePile();
-
         updateNumCards();
     }
 
@@ -540,17 +544,16 @@ public class MainActivity extends AppCompatActivity {
         String p1Json = gson.toJson(playerOne);
         String p2Json = gson.toJson(playerTwo);
         String midJson = gson.toJson(middlePile);
-        editor.putString("p1Deck", p1Json);
-        editor.putString("p2Deck", p2Json);
-        editor.putString("midDeck", midJson);
+        editor.putString(getString(R.string.p1_save_preference), p1Json);
+        editor.putString(getString(R.string.p2_save_preference), p2Json);
+        editor.putString(getString(R.string.mid_save_preference), midJson);
         editor.apply();
     }
 
     private void loadData() {
-
-        String p1Json = sp.getString("p1Deck", null);
-        String p2Json = sp.getString("p2Deck", null);
-        String midJson = sp.getString("midDeck", null);
+        String p1Json = sp.getString(getString(R.string.p1_save_preference), null);
+        String p2Json = sp.getString(getString(R.string.p2_save_preference), null);
+        String midJson = sp.getString(getString(R.string.mid_save_preference), null);
 
         // json cannot be retrieved from shared preferences
         if (p1Json == null || p2Json == null || midJson == null) {
@@ -563,6 +566,19 @@ public class MainActivity extends AppCompatActivity {
         middlePile = gson.fromJson(midJson, MiddlePile.class);
 
         updateNumCards();
+
+        int p1Size = playerOne.getSize();
+        int p2Size = playerTwo.getSize();
+        if (p1Size == 0 || p2Size == 0) {
+            // p2 wins
+            if (p1Size == 0) {
+                endGame(getString(R.string.p2_wins_message));
+            }
+            // p1 wins
+            else {
+                endGame(getString(R.string.p1_wins_message));
+            }
+        }
     }
 
     private void updateNumCards() {
@@ -572,6 +588,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetGame() {
+        gameEnd = false;
         initializeDecks();
         p1PlayIndicator.setVisibility(View.VISIBLE);
         p2PlayIndicator.setVisibility(View.INVISIBLE);
@@ -580,7 +597,7 @@ public class MainActivity extends AppCompatActivity {
         playerTwoPlays = 0;
         isFCPlayerOne = false;
         isFCPlayerTwo = false;
-        burnSlap.setText("RESET");
+        burnSlap.setText(getString(R.string.reset));
         nextCardImage.setImageResource(R.drawable.rat);
         enableButtons();
     }

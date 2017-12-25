@@ -11,17 +11,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="EGYPTIAN RAT SCREW"
-        android:textSize="30sp" />
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:textSize="40sp" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200dp"
-        android:onClick="newGame"
-        android:text="NEW GAME" />
+        android:src="@drawable/rat" />
 
     <Button
         android:layout_width="wrap_content"
@@ -29,8 +27,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="150dp"
-        android:onClick="continueGame"
-        android:text="CONTINUE" />
+        android:onClick="newGame"
+        android:text="@string/new_game" />
 
     <Button
         android:layout_width="wrap_content"
@@ -38,8 +36,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        android:onClick="howTo"
-        android:text="HOW TO" />
+        android:onClick="continueGame"
+        android:text="@string/continue_game" />
 
     <Button
         android:layout_width="wrap_content"
@@ -48,6 +46,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:onClick="about"
-        android:text="ABOUT" />
+        android:text="@string/about_game" />
 
 </RelativeLayout>

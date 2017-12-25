@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
 public class HomeActivity extends AppCompatActivity {
 
     @Override
@@ -15,23 +17,18 @@ public class HomeActivity extends AppCompatActivity {
 
     public void newGame(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("newGame", true);
+        intent.putExtra(getResources().getString(R.string.new_game_preference), true);
         startActivity(intent);
     }
 
     public void continueGame(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("newGame", false);
+        intent.putExtra(getResources().getString(R.string.new_game_preference), false);
         startActivity(intent);
     }
 
     public void about(View view) {
-        Intent intent = new Intent(this, AboutActivity.class);
-        startActivity(intent);
-    }
-
-    public void howTo(View view) {
-        Intent intent = new Intent(this, InstructionsActivity.class);
+        Intent intent = new Intent(this, OssLicensesMenuActivity.class);
         startActivity(intent);
     }
 }
