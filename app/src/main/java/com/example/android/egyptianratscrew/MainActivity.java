@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
-import android.view.MenuItem;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     // play indicators (whose turn it is)
     private ImageView p1PlayIndicator, p2PlayIndicator;
 
-    private Button p1PlayButton, p2PlayButton, p1SlapButton, p2SlapButton;
+    private ImageButton p1PlayButton, p2PlayButton, p1SlapButton, p2SlapButton;
 
     private ViewGroup rootView;
 
@@ -82,10 +82,14 @@ public class MainActivity extends AppCompatActivity {
         burnSlap = (TextView) findViewById(R.id.burn_slap);
 
         // initialize buttons
-        p1PlayButton = (Button) findViewById(R.id.p1_play);
-        p2PlayButton = (Button) findViewById(R.id.p2_play);
-        p1SlapButton = (Button) findViewById(R.id.p1_slap);
-        p2SlapButton = (Button) findViewById(R.id.p2_slap);
+        p1PlayButton = (ImageButton) findViewById(R.id.p1_play);
+        p2PlayButton = (ImageButton) findViewById(R.id.p2_play);
+        p1SlapButton = (ImageButton) findViewById(R.id.p1_slap);
+        p2SlapButton = (ImageButton) findViewById(R.id.p2_slap);
+        Glide.with(this).load(R.drawable.play_icon).into(p1PlayButton);
+        Glide.with(this).load(R.drawable.play_icon).into(p2PlayButton);
+        Glide.with(this).load(R.drawable.hand_icon).into(p1SlapButton);
+        Glide.with(this).load(R.drawable.hand_icon).into(p2SlapButton);
 
         rootView = (ViewGroup) findViewById(R.id.rootLayout);
 
@@ -94,36 +98,27 @@ public class MainActivity extends AppCompatActivity {
         boolean newGame = getIntent().getBooleanExtra(getString(R.string.new_game_preference), false);
         if (newGame) {
             resetGame();
-            burnSlap.setText(getString(R.string.new_game));
+            //burnSlap.setText(getString(R.string.new_game));
         } else {
             loadData();
         }
     }
 
-    public void openOptions(View view) {
-        Button optionsButton = (Button) findViewById(R.id.options_button);
-        PopupMenu popup = new PopupMenu(this, optionsButton);
-        popup.getMenuInflater().inflate(R.menu.options_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.home:
-                        saveData();
-                        startActivity(new Intent(mContext, HomeActivity.class));
-                        return true;
-                    case R.id.reset:
-                        resetGame();
-                        return true;
-                    case R.id.save:
-                        burnSlap.setText(getString(R.string.save));
-                        saveData();
-                        return true;
-                    default:
-                        return true;
-                }
-            }
-        });
-        popup.show();
+    public void homeButton(View view) {
+        saveData();
+        startActivity(new Intent(mContext, HomeActivity.class));
+    }
+
+    public void resetButton(View view) {
+        burnSlap.bringToFront();
+        burnSlap.setText(getString(R.string.reset));
+        resetGame();
+    }
+
+    public void saveButton(View view) {
+        burnSlap.bringToFront();
+        burnSlap.setText(getString(R.string.save));
+        saveData();
     }
 
     public void playerOneSlap(View view) {
@@ -358,22 +353,26 @@ public class MainActivity extends AppCompatActivity {
 
         view.bringToFront();
 
-        int centerX = rootView.getWidth() / 2;
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int statusBarOffset = dm.heightPixels - rootView.getMeasuredHeight();
+
+        int centerY = rootView.getHeight() / 2;
 
         int originalPos[] = new int[2];
         view.getLocationOnScreen(originalPos);
-        int startX = originalPos[0];
+        int startY = originalPos[1];
 
-        int cardWidth = view.getWidth() / 2;
+        int cardHeight = view.getHeight() / 2;
 
-        int deltaX;
+        int deltaY;
         if (playerOne) {
-            deltaX = centerX - startX - cardWidth;
+            deltaY = centerY - startY - cardHeight + statusBarOffset;
         } else {
-            deltaX = centerX - startX + cardWidth;
+            deltaY = centerY - startY + cardHeight - statusBarOffset;
         }
 
-        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, deltaY);
         anim.setDuration(150);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -383,9 +382,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                nextCardImage.setImageResource(imageId);
+                Glide.with(mContext).load(imageId).into(nextCardImage);
+                //nextCardImage.setImageResource(imageId);
+                nextCardImage.setVisibility(View.VISIBLE);
                 nextCardImage.bringToFront();
                 enableButtons();
+                numCardsPlayerOne.bringToFront();
+                numCardsPlayerTwo.bringToFront();
             }
 
             @Override
@@ -398,22 +401,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCardToCenterBurn(View view, final boolean playerOne) {
 
-        int centerX = rootView.getWidth() / 2;
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int statusBarOffset = dm.heightPixels - rootView.getMeasuredHeight();
+
+        int centerY = rootView.getHeight() / 2;
 
         int originalPos[] = new int[2];
         view.getLocationOnScreen(originalPos);
-        int startX = originalPos[0];
+        int startY = originalPos[1];
 
-        int cardWidth = view.getMeasuredWidth() / 2;
+        int cardHeight = view.getMeasuredHeight() / 2;
 
-        int deltaX;
+        int deltaY;
         if (playerOne) {
-            deltaX = centerX - startX - cardWidth;
+            deltaY = centerY - startY - cardHeight + statusBarOffset;
         } else {
-            deltaX = centerX - startX + cardWidth;
+            deltaY = centerY - startY + cardHeight - statusBarOffset;
         }
 
-        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, deltaY);
         anim.setDuration(200);
         anim.setAnimationListener(new Animation.AnimationListener() {
 
@@ -422,9 +429,10 @@ public class MainActivity extends AppCompatActivity {
                 nextCardImage.bringToFront();
                 // nothing in the pile
                 if (middlePile.getSize() == 1) {
-                    nextCardImage.setVisibility(View.GONE);
+                    nextCardImage.setVisibility(View.INVISIBLE);
                 }
                 disableButtons();
+                burnSlap.bringToFront();
             }
 
             @Override
@@ -432,9 +440,9 @@ public class MainActivity extends AppCompatActivity {
                 nextCardImage.setVisibility(View.VISIBLE);
                 if (middlePile.getSize() == 1) {
                     if (playerOne) {
-                        nextCardImage.setImageResource(R.drawable.player1card);
+                        nextCardImage.setImageResource(R.drawable.card);
                     } else {
-                        nextCardImage.setImageResource(R.drawable.player2card);
+                        nextCardImage.setImageResource(R.drawable.card);
                     }
                 }
                 enableButtons();
@@ -450,21 +458,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCardFromCenter(final boolean playerOne) {
 
-        int cardWidth = nextCardImage.getWidth() / 2;
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int statusBarOffset = dm.heightPixels - rootView.getMeasuredHeight();
 
-        int startX = rootView.getWidth() / 2;
+        int cardHeight = nextCardImage.getHeight() / 2;
+        int startY = rootView.getHeight() / 2;
 
         int endPos[] = new int[2];
-        int deltaX;
+        int deltaY;
         if (playerOne) {
             playerOneImage.getLocationOnScreen(endPos);
-            deltaX = endPos[0] - cardWidth - startX;
+            deltaY = endPos[1] - cardHeight - startY + statusBarOffset;
         } else {
             playerTwoImage.getLocationOnScreen(endPos);
-            deltaX = endPos[0] + cardWidth - startX;
+            deltaY = endPos[1] + cardHeight - startY - statusBarOffset;
         }
 
-        TranslateAnimation anim = new TranslateAnimation(0, deltaX, 0, 0);
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, deltaY);
         anim.setDuration(300);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -479,8 +490,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                nextCardImage.setImageResource(R.drawable.rat);
+                nextCardImage.setVisibility(View.INVISIBLE);
                 enableButtons();
+                numCardsPlayerOne.bringToFront();
+                numCardsPlayerTwo.bringToFront();
             }
 
             @Override
@@ -597,8 +610,7 @@ public class MainActivity extends AppCompatActivity {
         playerTwoPlays = 0;
         isFCPlayerOne = false;
         isFCPlayerTwo = false;
-        burnSlap.setText(getString(R.string.reset));
-        nextCardImage.setImageResource(R.drawable.rat);
+        nextCardImage.setVisibility(View.INVISIBLE);
         enableButtons();
     }
 }
