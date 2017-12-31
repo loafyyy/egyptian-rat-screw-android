@@ -8,6 +8,32 @@
     android:padding="32dp"
     tools:context="com.example.android.egyptianratscrew.HomeActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-20dp"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:id="@+id/play_iv"
+            android:layout_width="@dimen/home_image_size"
+            android:layout_height="@dimen/home_image_size" />
+
+        <ImageView
+            android:id="@+id/slap_iv"
+            android:layout_width="@dimen/home_image_size"
+            android:layout_height="@dimen/home_image_size" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="!"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/title_tv_1"
         android:layout_width="wrap_content"
@@ -41,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_tv_3"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <Button

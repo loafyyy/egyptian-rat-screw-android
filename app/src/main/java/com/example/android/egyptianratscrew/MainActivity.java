@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView burnSlap;
 
     // play indicators (whose turn it is)
-    private ImageView p1PlayIndicator, p2PlayIndicator;
+    private int playIndicatorOn = R.drawable.card_edge_glow;
+    private int playIndicatorOff = R.drawable.card;
 
     private ImageButton p1PlayButton, p2PlayButton, p1SlapButton, p2SlapButton;
 
@@ -74,9 +75,8 @@ public class MainActivity extends AppCompatActivity {
         numCardsCenter = (TextView) findViewById(R.id.num_cards_middle);
 
         // play indicators
-        p1PlayIndicator = (ImageView) findViewById(R.id.p1_play_indicator);
-        p2PlayIndicator = (ImageView) findViewById(R.id.p2_play_indicator);
-        p2PlayIndicator.setVisibility(View.INVISIBLE);
+        Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+        Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
 
         // initialize burn/slap text view
         burnSlap = (TextView) findViewById(R.id.burn_slap);
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         boolean newGame = getIntent().getBooleanExtra(getString(R.string.new_game_preference), false);
         if (newGame) {
             resetGame();
-            //burnSlap.setText(getString(R.string.new_game));
         } else {
             loadData();
         }
@@ -111,12 +110,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetButton(View view) {
         burnSlap.bringToFront();
+        burnSlap.setRotation(0);
         burnSlap.setText(getString(R.string.reset));
         resetGame();
     }
 
     public void saveButton(View view) {
         burnSlap.bringToFront();
+        burnSlap.setRotation(0);
         burnSlap.setText(getString(R.string.save));
         saveData();
     }
@@ -127,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
         if (middlePile.shouldSlap()) {
 
             // p1 turn
-            p1PlayIndicator.setVisibility(View.VISIBLE);
-            p2PlayIndicator.setVisibility(View.INVISIBLE);
+            Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+            Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
 
             // update shouldSlap so player two cannot slap
             middlePile.shouldntSlap();
@@ -144,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player one
             middlePile.emptyPile(playerOne);
             moveCardFromCenter(true);
+            burnSlap.bringToFront();
+            burnSlap.setRotation(0);
             burnSlap.setText(getString(R.string.p1_slaps));
         }
 
@@ -151,8 +154,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             // p1 runs out of cards - player two wins
             if (playerOne.getSize() <= 1) {
+                burnSlap.setRotation(180);
                 endGame(getString(R.string.p2_wins_message));
             } else {
+                burnSlap.setRotation(0);
                 burnSlap.setText(getString(R.string.p1_burn));
             }
 
@@ -169,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
         if (middlePile.shouldSlap()) {
 
             // p2 turn
-            p1PlayIndicator.setVisibility(View.INVISIBLE);
-            p2PlayIndicator.setVisibility(View.VISIBLE);
+            Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
+            Glide.with(this).load(playIndicatorOff).into(playerOneImage);
 
             // update shouldSlap so player one cannot slap again
             middlePile.shouldntSlap();
@@ -186,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player two
             middlePile.emptyPile(playerTwo);
             moveCardFromCenter(false);
+            burnSlap.bringToFront();
+            burnSlap.setRotation(180);
             burnSlap.setText(getString(R.string.p2_slaps));
         }
 
@@ -193,8 +200,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             // p2 runs out of cards - player one wins
             if (playerTwo.getSize() <= 1) {
+                burnSlap.setRotation(0);
                 endGame(getString(R.string.p1_wins_message));
             } else {
+                burnSlap.setRotation(180);
                 burnSlap.setText(getString(R.string.p2_burn));
             }
             // burn player two's next card
@@ -226,8 +235,8 @@ public class MainActivity extends AppCompatActivity {
             if (nextCard.isFaceCard()) {
 
                 // change play indicator
-                p1PlayIndicator.setVisibility(View.INVISIBLE);
-                p2PlayIndicator.setVisibility(View.VISIBLE);
+                Glide.with(this).load(playIndicatorOff).into(playerOneImage);
+                Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
 
                 // if it is, then it means
                 // player one played the last face card
@@ -255,8 +264,8 @@ public class MainActivity extends AppCompatActivity {
             else {
 
                 // change play indicator
-                p1PlayIndicator.setVisibility(View.INVISIBLE);
-                p2PlayIndicator.setVisibility(View.VISIBLE);
+                Glide.with(this).load(playIndicatorOff).into(playerOneImage);
+                Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
 
                 playerOnePlays -= 1;
                 playerTwoPlays += 1;
@@ -298,8 +307,8 @@ public class MainActivity extends AppCompatActivity {
             if (nextCard.isFaceCard()) {
 
                 // change play indicator
-                p2PlayIndicator.setVisibility(View.INVISIBLE);
-                p1PlayIndicator.setVisibility(View.VISIBLE);
+                Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+                Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
 
                 // if it is, then it means
                 // player two played the last face card
@@ -327,8 +336,8 @@ public class MainActivity extends AppCompatActivity {
             else {
 
                 // change play indicator
-                p2PlayIndicator.setVisibility(View.INVISIBLE);
-                p1PlayIndicator.setVisibility(View.VISIBLE);
+                Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+                Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
 
                 playerTwoPlays -= 1;
                 playerOnePlays += 1;
@@ -603,8 +612,8 @@ public class MainActivity extends AppCompatActivity {
     private void resetGame() {
         gameEnd = false;
         initializeDecks();
-        p1PlayIndicator.setVisibility(View.VISIBLE);
-        p2PlayIndicator.setVisibility(View.INVISIBLE);
+        Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+        Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
         updateNumCards();
         playerOnePlays = 1;
         playerTwoPlays = 0;

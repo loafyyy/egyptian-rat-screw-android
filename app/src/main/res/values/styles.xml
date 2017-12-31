@@ -9,4 +9,13 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="text_style_slap">
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textSize">@dimen/font_size_slap</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">20</item>
+    </style>
+
 </resources>

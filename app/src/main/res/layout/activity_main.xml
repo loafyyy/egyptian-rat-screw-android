@@ -8,14 +8,6 @@
     tools:context="com.example.android.egyptianratscrew.MainActivity">
 
     <ImageView
-        android:id="@+id/p2_play_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="100dp"
-        android:src="@android:drawable/ic_media_play" />
-
-    <ImageView
         android:id="@+id/player_two_card_back"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
@@ -68,10 +60,11 @@
 
     <TextView
         android:id="@+id/burn_slap"
+        style="@style/text_style_slap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="@dimen/font_size_slap" />
+        android:gravity="center" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -130,15 +123,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-80dp"
         android:src="@drawable/card" />
-
-    <ImageView
-        android:id="@+id/p1_play_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="50dp"
-        android:src="@android:drawable/ic_media_play" />
 
     <ImageButton
         android:id="@+id/p1_slap"
