@@ -18,4 +18,10 @@
         <item name="android:shadowRadius">20</item>
     </style>
 
+    <style name="game_button">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

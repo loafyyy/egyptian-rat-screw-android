@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     // images for the different piles
     private ImageView playerOneImage, playerTwoImage, nextCardImage;
+    // middle card image ID - used for saving
+    private int resID;
 
     // indicates how many cards left in pile
     private TextView numCardsPlayerOne, numCardsPlayerTwo, numCardsCenter;
@@ -74,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
         numCardsPlayerTwo = (TextView) findViewById(R.id.num_cards_player_two);
         numCardsCenter = (TextView) findViewById(R.id.num_cards_middle);
 
-        // play indicators
-        Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-        Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
-
         // initialize burn/slap text view
         burnSlap = (TextView) findViewById(R.id.burn_slap);
 
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void homeButton(View view) {
-        saveData();
         startActivity(new Intent(mContext, HomeActivity.class));
     }
 
@@ -227,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
             Card nextCard = playerOne.playTopCard();
             middlePile.addCard(nextCard);
-            final int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
+            resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
 
             moveCardToCenter(playerOneImage, resID, true);
 
@@ -300,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
             Card nextCard = playerTwo.playTopCard();
             middlePile.addCard(nextCard);
-            final int resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
+            resID = getResources().getIdentifier(nextCard.toString(), "drawable", getPackageName());
             moveCardToCenter(playerTwoImage, resID, false);
 
             // checks if the card is a face card
@@ -566,9 +563,19 @@ public class MainActivity extends AppCompatActivity {
         String p1Json = gson.toJson(playerOne);
         String p2Json = gson.toJson(playerTwo);
         String midJson = gson.toJson(middlePile);
+
         editor.putString(getString(R.string.p1_save_preference), p1Json);
         editor.putString(getString(R.string.p2_save_preference), p2Json);
         editor.putString(getString(R.string.mid_save_preference), midJson);
+        editor.putInt(getString(R.string.p1_num_plays_preference), playerOnePlays);
+        editor.putInt(getString(R.string.p2_num_plays_preference), playerTwoPlays);
+        editor.putBoolean(getString(R.string.p1_face_card_preference), isFCPlayerOne);
+        editor.putBoolean(getString(R.string.p2_face_card_preference), isFCPlayerTwo);
+
+        if (middlePile.getSize() > 0) {
+            editor.putInt(getString(R.string.mid_card_img_id_preference), resID);
+        }
+
         editor.apply();
     }
 
@@ -586,9 +593,31 @@ public class MainActivity extends AppCompatActivity {
         playerOne = gson.fromJson(p1Json, PlayerDeck.class);
         playerTwo = gson.fromJson(p2Json, PlayerDeck.class);
         middlePile = gson.fromJson(midJson, MiddlePile.class);
+        playerOnePlays = sp.getInt(getString(R.string.p1_num_plays_preference), 1);
+        playerTwoPlays = sp.getInt(getString(R.string.p2_num_plays_preference), 0);
+        isFCPlayerOne = sp.getBoolean(getString(R.string.p1_face_card_preference), false);
+        isFCPlayerTwo = sp.getBoolean(getString(R.string.p2_face_card_preference), false);
 
+        // set play indicator
+        if (playerOnePlays != 0) {
+            // play indicators
+            Glide.with(this).load(playIndicatorOn).into(playerOneImage);
+            Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
+        }
+        else {
+            // play indicators
+            Glide.with(this).load(playIndicatorOff).into(playerOneImage);
+            Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
+        }
+
+        // set middle card image
+        int id = sp.getInt(getString(R.string.mid_card_img_id_preference), -1);
+        if (id != -1) {
+            Glide.with(mContext).load(id).into(nextCardImage);
+        }
         updateNumCards();
 
+        // if was saved at end of game
         int p1Size = playerOne.getSize();
         int p2Size = playerTwo.getSize();
         if (p1Size == 0 || p2Size == 0) {

@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="card_width">150dp</dimen>
     <dimen name="card_height">220dp</dimen>
-    <dimen name="font_size_slap">55sp</dimen>
+    <dimen name="font_size_slap">50sp</dimen>
     <dimen name="font_size_num_cards">40sp</dimen>
     <dimen name="font_size_title">70sp</dimen>
     <dimen name="button_size">100dp</dimen>

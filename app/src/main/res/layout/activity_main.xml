@@ -70,28 +70,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-100dp"
+        android:layout_marginLeft="-80dp"
         android:orientation="horizontal"
         android:rotation="-90">
 
         <Button
             android:id="@+id/home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/game_button"
             android:onClick="homeButton"
             android:text="@string/menu_home" />
 
         <Button
             android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/game_button"
             android:onClick="saveButton"
             android:text="@string/menu_save" />
 
         <Button
             android:id="@+id/reset_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/game_button"
             android:onClick="resetButton"
             android:text="@string/menu_reset" />
 
@@ -104,6 +101,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="50dp"
         android:layout_toRightOf="@id/middle_card"
+        android:rotation="90"
         android:textSize="@dimen/font_size_num_cards" />
 
     <ImageView
