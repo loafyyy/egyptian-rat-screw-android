@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,16 +77,13 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize burn/slap text view
         burnSlap = (TextView) findViewById(R.id.burn_slap);
+        burnSlap.setRotation(0);
 
         // initialize buttons
         p1PlayButton = (ImageButton) findViewById(R.id.p1_play);
         p2PlayButton = (ImageButton) findViewById(R.id.p2_play);
         p1SlapButton = (ImageButton) findViewById(R.id.p1_slap);
         p2SlapButton = (ImageButton) findViewById(R.id.p2_slap);
-        Glide.with(this).load(R.drawable.play_icon).into(p1PlayButton);
-        Glide.with(this).load(R.drawable.play_icon).into(p2PlayButton);
-        Glide.with(this).load(R.drawable.hand_icon).into(p1SlapButton);
-        Glide.with(this).load(R.drawable.hand_icon).into(p2SlapButton);
 
         rootView = (ViewGroup) findViewById(R.id.rootLayout);
 
@@ -125,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         if (middlePile.shouldSlap()) {
 
             // p1 turn
-            Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-            Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
+            playerOneImage.setImageResource(playIndicatorOn);
+            playerTwoImage.setImageResource(playIndicatorOff);
 
             // update shouldSlap so player two cannot slap
             middlePile.shouldntSlap();
@@ -171,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
         if (middlePile.shouldSlap()) {
 
             // p2 turn
-            Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
-            Glide.with(this).load(playIndicatorOff).into(playerOneImage);
+            playerOneImage.setImageResource(playIndicatorOff);
+            playerTwoImage.setImageResource(playIndicatorOn);
 
             // update shouldSlap so player one cannot slap again
             middlePile.shouldntSlap();
@@ -219,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
             // player two wins
             if (playerOne.getSize() <= 1) {
+                burnSlap.setRotation(180);
                 endGame(getString(R.string.p2_wins_message));
             }
 
@@ -232,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
             if (nextCard.isFaceCard()) {
 
                 // change play indicator
-                Glide.with(this).load(playIndicatorOff).into(playerOneImage);
-                Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
+                playerOneImage.setImageResource(playIndicatorOff);
+                playerTwoImage.setImageResource(playIndicatorOn);
 
                 // if it is, then it means
                 // player one played the last face card
@@ -261,8 +258,8 @@ public class MainActivity extends AppCompatActivity {
             else {
 
                 // change play indicator
-                Glide.with(this).load(playIndicatorOff).into(playerOneImage);
-                Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
+                playerOneImage.setImageResource(playIndicatorOff);
+                playerTwoImage.setImageResource(playIndicatorOn);
 
                 playerOnePlays -= 1;
                 playerTwoPlays += 1;
@@ -292,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
             // player one wins
             if (playerTwo.getSize() <= 1) {
+                burnSlap.setRotation(0);
                 endGame(getString(R.string.p1_wins_message));
             }
 
@@ -304,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
             if (nextCard.isFaceCard()) {
 
                 // change play indicator
-                Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-                Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
+                playerOneImage.setImageResource(playIndicatorOn);
+                playerTwoImage.setImageResource(playIndicatorOff);
 
                 // if it is, then it means
                 // player two played the last face card
@@ -333,8 +331,8 @@ public class MainActivity extends AppCompatActivity {
             else {
 
                 // change play indicator
-                Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-                Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
+                playerOneImage.setImageResource(playIndicatorOn);
+                playerTwoImage.setImageResource(playIndicatorOff);
 
                 playerTwoPlays -= 1;
                 playerOnePlays += 1;
@@ -384,17 +382,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animation animation) {
                 disableButtons();
+                if (gameEnd) {
+                    burnSlap.bringToFront();
+                }
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Glide.with(mContext).load(imageId).into(nextCardImage);
-                //nextCardImage.setImageResource(imageId);
+                nextCardImage.setImageResource(imageId);
                 nextCardImage.setVisibility(View.VISIBLE);
                 nextCardImage.bringToFront();
                 enableButtons();
                 numCardsPlayerOne.bringToFront();
                 numCardsPlayerTwo.bringToFront();
+                if (gameEnd) {
+                    burnSlap.bringToFront();
+                }
             }
 
             @Override
@@ -574,6 +577,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (middlePile.getSize() > 0) {
             editor.putInt(getString(R.string.mid_card_img_id_preference), resID);
+        } else {
+            editor.putInt(getString(R.string.mid_card_img_id_preference), -1);
         }
 
         editor.apply();
@@ -601,19 +606,20 @@ public class MainActivity extends AppCompatActivity {
         // set play indicator
         if (playerOnePlays != 0) {
             // play indicators
-            Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-            Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
-        }
-        else {
+            playerOneImage.setImageResource(playIndicatorOn);
+            playerTwoImage.setImageResource(playIndicatorOff);
+        } else {
             // play indicators
-            Glide.with(this).load(playIndicatorOff).into(playerOneImage);
-            Glide.with(this).load(playIndicatorOn).into(playerTwoImage);
+            playerOneImage.setImageResource(playIndicatorOff);
+            playerTwoImage.setImageResource(playIndicatorOn);
         }
 
         // set middle card image
         int id = sp.getInt(getString(R.string.mid_card_img_id_preference), -1);
         if (id != -1) {
-            Glide.with(mContext).load(id).into(nextCardImage);
+            nextCardImage.setImageResource(id);
+        } else {
+            nextCardImage.setVisibility(View.INVISIBLE);
         }
         updateNumCards();
 
@@ -641,8 +647,8 @@ public class MainActivity extends AppCompatActivity {
     private void resetGame() {
         gameEnd = false;
         initializeDecks();
-        Glide.with(this).load(playIndicatorOn).into(playerOneImage);
-        Glide.with(this).load(playIndicatorOff).into(playerTwoImage);
+        playerOneImage.setImageResource(playIndicatorOn);
+        playerTwoImage.setImageResource(playIndicatorOff);
         updateNumCards();
         playerOnePlays = 1;
         playerTwoPlays = 0;

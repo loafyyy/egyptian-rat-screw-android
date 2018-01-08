@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.egyptianratscrew"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,4 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.google.android.gms:play-services-oss-licenses:11.8.0'
     testCompile 'junit:junit:4.12'
-    implementation 'com.github.bumptech.glide:glide:4.4.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
 }
