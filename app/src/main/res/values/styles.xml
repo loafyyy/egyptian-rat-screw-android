@@ -1,14 +1,31 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <!-- Title Text on Home page -->
+    <style name="home_text">
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font_size_title</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Buttons on Home page -->
+    <style name="home_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:background">@drawable/home_button</item>
+    </style>
+
+    <!-- Slap/Burn/You Win -->
     <style name="text_style_slap">
         <item name="android:textColor">@color/dark_grey</item>
         <item name="android:textSize">@dimen/font_size_slap</item>
@@ -16,12 +33,43 @@
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
         <item name="android:shadowRadius">20</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- Buttons (Home/Save/Reset) in Main Activity (Game) -->
     <style name="game_button">
         <item name="android:layout_width">70dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- ImageButtons (Home/Save/Reset) in Main Activity (Game) -->
+    <style name="game_image_button">
+        <item name="android:layout_width">@dimen/button_size</item>
+        <item name="android:layout_height">@dimen/button_size</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <!-- Cards in Main Activity (Game) -->
+    <style name="game_card">
+        <item name="android:layout_width">@dimen/card_width</item>
+        <item name="android:layout_height">@dimen/card_height</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/card</item>
+    </style>
+
+    <!-- Text (Num Cards) in Main Activity (Game) -->
+    <style name="num_cards_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font_size_num_cards</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

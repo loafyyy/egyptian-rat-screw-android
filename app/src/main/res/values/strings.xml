@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Egyptian Rat Screw</string>
-    <string name="preference_file_key">com.example.android.egyptianratscrew.PREFERENCES</string>
+    <string name="app_name_home_page">Egyptian\nRat\nScrew</string>
+    <string name="exclamation_mark">!</string>
     <string name="options_menu">Options</string>
     <string name="slap">Slap</string>
     <string name="play">Play</string>
@@ -12,14 +13,15 @@
     <string name="menu_home">Home</string>
     <string name="menu_reset">Reset</string>
     <string name="menu_save">Save</string>
-    <string name="p1_slaps">P1 SLAP!</string>
-    <string name="p1_burn">P1 BURN!</string>
-    <string name="p2_slaps">P2 SLAP!</string>
-    <string name="p2_burn">P2 BURN!</string>
-    <string name="p1_wins_message">PLAYER\nONE\nWINS!</string>
-    <string name="p2_wins_message">PLAYER\nTWO\nWINS!</string>
+    <string name="p1_slaps">SLAP!</string>
+    <string name="p1_burn">BURN!</string>
+    <string name="p2_slaps">SLAP!</string>
+    <string name="p2_burn">BURN!</string>
+    <string name="p1_wins_message">YOU\nWIN!</string>
+    <string name="p2_wins_message">YOU\nWIN!</string>
 
     <!-- preferences -->
+    <string name="preference_file_key">com.example.android.egyptianratscrew.PREFERENCES</string>
     <string name="new_game_preference">newGame</string>
     <string name="p1_save_preference">p1Deck</string>
     <string name="p2_save_preference">p2Deck</string>
