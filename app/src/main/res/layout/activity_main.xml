@@ -10,13 +10,13 @@
     <ImageView
         android:id="@+id/player_two_card_back"
         style="@style/game_card"
-        android:layout_marginTop="-80dp"
+        android:layout_marginTop="-100dp"
         android:rotation="180" />
 
     <ImageView
         android:id="@+id/player_two_card"
         style="@style/game_card"
-        android:layout_marginTop="-80dp"
+        android:layout_marginTop="-100dp"
         android:rotation="180" />
 
     <ImageButton
@@ -96,19 +96,20 @@
         android:fontFamily="@font/lato"
         android:rotation="90"
         android:textSize="@dimen/font_size_num_cards"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/player_one_card_back"
         style="@style/game_card"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-80dp" />
+        android:layout_marginBottom="-100dp" />
 
     <ImageView
         android:id="@+id/player_one_card"
         style="@style/game_card"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-80dp" />
+        android:layout_marginBottom="-100dp" />
 
     <ImageButton
         android:id="@+id/p1_slap"
