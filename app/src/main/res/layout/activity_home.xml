@@ -29,14 +29,12 @@
             android:scaleType="fitXY"
             android:src="@drawable/hand_icon" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/burn_iv"
             android:layout_width="@dimen/home_image_size"
             android:layout_height="@dimen/home_image_size"
-            android:fontFamily="@font/lato"
-            android:gravity="center"
-            android:text="@string/exclamation_mark"
-            android:textSize="65sp"
-            android:textStyle="bold" />
+            android:scaleType="fitXY"
+            android:src="@drawable/burn_icon" />
 
     </LinearLayout>
 

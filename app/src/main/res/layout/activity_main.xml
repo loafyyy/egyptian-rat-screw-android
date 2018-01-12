@@ -48,6 +48,13 @@
         android:layout_centerInParent="true"
         android:scaleType="fitXY" />
 
+    <ImageView
+        android:id="@+id/middle_icon"
+        android:layout_width="@dimen/mid_icon_size"
+        android:layout_height="@dimen/mid_icon_size"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop" />
+
     <TextView
         android:id="@+id/burn_slap"
         style="@style/text_style_slap"

@@ -18,6 +18,9 @@ import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO remove card when YOU Win
+
+
     // how many cards does each player have to play
     // start with player one
     private int playerOnePlays = 1;
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private MiddlePile middlePile;
 
     // images for the different piles
-    private ImageView playerOneImage, playerTwoImage, nextCardImage;
+    private ImageView playerOneImage, playerTwoImage, nextCardImage, middleIcon;
     // middle card image ID - used for saving
     private int resID;
 
@@ -69,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
         playerTwoImage = (ImageView) findViewById(R.id.player_two_card);
         nextCardImage = (ImageView) findViewById(R.id.middle_card);
+        middleIcon = (ImageView) findViewById(R.id.middle_icon);
+        middleIcon.setRotation(0);
+        middleIcon.setImageDrawable(null);
 
         // initialize text views that show number of cards in the piles
         numCardsPlayerOne = (TextView) findViewById(R.id.num_cards_player_one);
@@ -117,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void playerOneSlap(View view) {
 
+        burnSlap.setText("");
+        middleIcon.setImageDrawable(null);
+
         // if the slap was correct
         if (middlePile.shouldSlap()) {
 
@@ -138,9 +147,9 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player one
             middlePile.emptyPile(playerOne);
             moveCardFromCenter(true);
-            burnSlap.bringToFront();
-            burnSlap.setRotation(0);
-            burnSlap.setText(getString(R.string.p1_slaps));
+            middleIcon.bringToFront();
+            middleIcon.setRotation(0);
+            middleIcon.setImageResource(R.drawable.hand_icon);
         }
 
         // if the slap was incorrect
@@ -149,9 +158,6 @@ public class MainActivity extends AppCompatActivity {
             if (playerOne.getSize() <= 1) {
                 burnSlap.setRotation(180);
                 endGame(getString(R.string.p2_wins_message));
-            } else {
-                burnSlap.setRotation(0);
-                burnSlap.setText(getString(R.string.p1_burn));
             }
 
             // burn player one's next card
@@ -162,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void playerTwoSlap(View view) {
+
+        burnSlap.setText("");
+        middleIcon.setImageDrawable(null);
 
         // if the slap was correct
         if (middlePile.shouldSlap()) {
@@ -184,9 +193,9 @@ public class MainActivity extends AppCompatActivity {
             // add middle pile to player two
             middlePile.emptyPile(playerTwo);
             moveCardFromCenter(false);
-            burnSlap.bringToFront();
-            burnSlap.setRotation(180);
-            burnSlap.setText(getString(R.string.p2_slaps));
+            middleIcon.bringToFront();
+            middleIcon.setRotation(180);
+            middleIcon.setImageResource(R.drawable.hand_icon);
         }
 
         // if the slap was incorrect
@@ -195,9 +204,6 @@ public class MainActivity extends AppCompatActivity {
             if (playerTwo.getSize() <= 1) {
                 burnSlap.setRotation(0);
                 endGame(getString(R.string.p1_wins_message));
-            } else {
-                burnSlap.setRotation(180);
-                burnSlap.setText(getString(R.string.p2_burn));
             }
             // burn player two's next card
             middlePile.burn(playerTwo.playTopCard());
@@ -209,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
     public void playerOnePlay(View view) {
 
         burnSlap.setText("");
+        middleIcon.setImageDrawable(null);
 
         // player one can only play when it's his/her turn
         if (playerOnePlays != 0) {
@@ -283,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
     public void playerTwoPlay(View view) {
 
         burnSlap.setText("");
+        middleIcon.setImageDrawable(null);
 
         // player two can only play when it's his/her turn
         if (playerTwoPlays != 0) {
@@ -441,7 +449,6 @@ public class MainActivity extends AppCompatActivity {
                     nextCardImage.setVisibility(View.INVISIBLE);
                 }
                 disableButtons();
-                burnSlap.bringToFront();
             }
 
             @Override
@@ -455,6 +462,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 enableButtons();
+                middleIcon.bringToFront();
+                middleIcon.setImageResource(R.drawable.burn_icon);
             }
 
             @Override
@@ -645,6 +654,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetGame() {
+        middleIcon.setImageDrawable(null);
         gameEnd = false;
         initializeDecks();
         playerOneImage.setImageResource(playIndicatorOn);
