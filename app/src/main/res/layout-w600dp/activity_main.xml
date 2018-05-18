@@ -9,19 +9,19 @@
 
     <ImageView
         android:id="@+id/player_two_card_back"
-        style="@style/game_card"
-        android:layout_marginTop="-120dp"
+        style="@style/game_card_large"
+        android:layout_marginTop="-180dp"
         android:rotation="180" />
 
     <ImageView
         android:id="@+id/player_two_card"
-        style="@style/game_card"
-        android:layout_marginTop="-120dp"
+        style="@style/game_card_large"
+        android:layout_marginTop="-180dp"
         android:rotation="180" />
 
     <ImageButton
         android:id="@+id/p2_slap"
-        style="@style/game_image_button"
+        style="@style/game_image_button_large"
         android:layout_toEndOf="@id/player_two_card"
         android:onClick="playerTwoSlap"
         android:rotation="180"
@@ -30,7 +30,7 @@
 
     <ImageButton
         android:id="@+id/p2_play"
-        style="@style/game_image_button"
+        style="@style/game_image_button_large"
         android:layout_toStartOf="@id/player_two_card"
         android:onClick="playerTwoPlay"
         android:rotation="180"
@@ -39,28 +39,28 @@
 
     <TextView
         android:id="@+id/num_cards_player_two"
-        style="@style/num_cards_text"
+        style="@style/num_cards_text_large"
         android:layout_marginTop="20dp"
         android:rotation="180"
         tools:text="7"/>
 
     <ImageView
         android:id="@+id/middle_card"
-        android:layout_width="@dimen/card_width"
-        android:layout_height="@dimen/card_height"
+        android:layout_width="@dimen/card_width_large"
+        android:layout_height="@dimen/card_height_large"
         android:layout_centerInParent="true"
         android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/middle_icon"
-        android:layout_width="@dimen/mid_icon_size"
-        android:layout_height="@dimen/mid_icon_size"
+        android:layout_width="@dimen/mid_icon_size_large"
+        android:layout_height="@dimen/mid_icon_size_large"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/burn_slap"
-        style="@style/text_style_slap"
+        style="@style/text_style_slap_large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -79,19 +79,19 @@
 
         <Button
             android:id="@+id/home_button"
-            style="@style/game_button"
+            style="@style/game_button_large"
             android:onClick="homeButton"
             android:text="@string/menu_home" />
 
         <Button
             android:id="@+id/save_button"
-            style="@style/game_button"
+            style="@style/game_button_large"
             android:onClick="saveButton"
             android:text="@string/menu_save" />
 
         <Button
             android:id="@+id/reset_button"
-            style="@style/game_button"
+            style="@style/game_button_large"
             android:onClick="resetButton"
             android:text="@string/menu_reset" />
 
@@ -114,19 +114,19 @@
 
     <ImageView
         android:id="@+id/player_one_card_back"
-        style="@style/game_card"
+        style="@style/game_card_large"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-120dp" />
+        android:layout_marginBottom="-180dp" />
 
     <ImageView
         android:id="@+id/player_one_card"
-        style="@style/game_card"
+        style="@style/game_card_large"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-120dp" />
+        android:layout_marginBottom="-180dp" />
 
     <ImageButton
         android:id="@+id/p1_slap"
-        style="@style/game_image_button"
+        style="@style/game_image_button_large"
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@id/player_one_card"
         android:onClick="playerOneSlap"
@@ -135,7 +135,7 @@
 
     <ImageButton
         android:id="@+id/p1_play"
-        style="@style/game_image_button"
+        style="@style/game_image_button_large"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/player_one_card"
         android:onClick="playerOnePlay"
@@ -144,7 +144,7 @@
 
     <TextView
         android:id="@+id/num_cards_player_one"
-        style="@style/num_cards_text"
+        style="@style/num_cards_text_large"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         tools:text="10"/>

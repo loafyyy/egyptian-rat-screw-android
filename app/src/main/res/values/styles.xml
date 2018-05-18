@@ -18,10 +18,10 @@
 
     <!-- Buttons on Home page -->
     <style name="home_button">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_margin">10dp</item>
         <item name="android:background">@drawable/home_button</item>
     </style>
 
@@ -29,6 +29,16 @@
     <style name="text_style_slap">
         <item name="android:textColor">@color/dark_grey</item>
         <item name="android:textSize">@dimen/font_size_slap</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">20</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="text_style_slap_large">
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textSize">@dimen/font_size_slap_large</item>
         <item name="android:shadowColor">@color/white</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
@@ -45,11 +55,25 @@
         <item name="android:fontFamily">@font/lato</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="game_button_large">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
     <!-- ImageButtons (Home/Save/Reset) in Main Activity (Game) -->
     <style name="game_image_button">
         <item name="android:layout_width">@dimen/button_size</item>
         <item name="android:layout_height">@dimen/button_size</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+    <style name="game_image_button_large">
+        <item name="android:layout_width">@dimen/button_size_large</item>
+        <item name="android:layout_height">@dimen/button_size_large</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:scaleType">fitXY</item>
     </style>
@@ -61,6 +85,12 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:src">@drawable/card</item>
     </style>
+    <style name="game_card_large">
+        <item name="android:layout_width">@dimen/card_width_large</item>
+        <item name="android:layout_height">@dimen/card_height_large</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/card</item>
+    </style>
 
     <!-- Text (Num Cards) in Main Activity (Game) -->
     <style name="num_cards_text">
@@ -69,6 +99,14 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:fontFamily">@font/lato</item>
         <item name="android:textSize">@dimen/font_size_num_cards</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="num_cards_text_large">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font_size_num_cards_large</item>
         <item name="android:textStyle">bold</item>
     </style>
 

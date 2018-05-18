@@ -21,9 +21,6 @@
             android:name="com.egyptianratscrew.android.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.egyptianratscrew.android.AboutActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

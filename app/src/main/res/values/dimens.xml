@@ -3,11 +3,17 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="card_width">150dp</dimen>
+    <dimen name="card_width_large">250dp</dimen>
     <dimen name="card_height">240dp</dimen>
-    <dimen name="mid_icon_size">400dp</dimen>
+    <dimen name="card_height_large">360dp</dimen>
+    <dimen name="mid_icon_size">350dp</dimen>
+    <dimen name="mid_icon_size_large">600dp</dimen>
     <dimen name="font_size_slap">80sp</dimen>
+    <dimen name="font_size_slap_large">120sp</dimen>
     <dimen name="font_size_num_cards">60sp</dimen>
-    <dimen name="font_size_title">70sp</dimen>
+    <dimen name="font_size_num_cards_large">90sp</dimen>
+    <dimen name="font_size_title">50sp</dimen>
     <dimen name="button_size">100dp</dimen>
+    <dimen name="button_size_large">150dp</dimen>
     <dimen name="home_image_size">100dp</dimen>
 </resources>
