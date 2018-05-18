@@ -1,25 +1,12 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android;
 
 import java.util.LinkedList;
 
 /**
- * Created by Jackie on 17-08-13.
- *
- *
- *  Name: Yaeeun Jeon
- *  PennKey: yje
- *  Recitation: 201
- *
- *  Name: Jacqueline Peng
- *  PennKey: pengja
- *  Recitation: 212
- *
- *  Execution: java Deck
- *
- *  Description: This class creates a deck
- *  object that can have 52 different Cards just
- *  like a regular deck of cards. One can also
- *  shuffle the Cards in the deck.
+ * Description: This class creates a deck
+ * object that can have 52 different Cards just
+ * like a regular deck of cards. One can also
+ * shuffle the Cards in the deck.
  */
 
 public class Deck {
@@ -47,8 +34,7 @@ public class Deck {
 
             if (i >= 11 || i == 1) {
                 isFaceCard = true;
-            }
-            else {
+            } else {
                 isFaceCard = false;
             }
 
@@ -60,14 +46,11 @@ public class Deck {
 
                 if (j == 1) {
                     suite = "diamonds";
-                }
-                else if (j == 2) {
+                } else if (j == 2) {
                     suite = "clubs";
-                }
-                else if (j == 3) {
+                } else if (j == 3) {
                     suite = "hearts";
-                }
-                else {
+                } else {
                     suite = "spades";
                 }
 

@@ -1,10 +1,11 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.egyptianratscrew.android.egyptianratscrew.R;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 public class HomeActivity extends AppCompatActivity {

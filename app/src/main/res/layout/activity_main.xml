@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/game_background"
-    tools:context="com.example.android.egyptianratscrew.MainActivity">
+    tools:context="com.egyptianratscrew.android.egyptianratscrew.com.egyptianratscrew.android.MainActivity">
 
     <ImageView
         android:id="@+id/player_two_card_back"

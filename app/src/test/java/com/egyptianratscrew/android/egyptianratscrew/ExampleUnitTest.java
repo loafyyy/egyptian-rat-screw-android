@@ -1,4 +1,4 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android.egyptianratscrew;
 
 import org.junit.Test;
 

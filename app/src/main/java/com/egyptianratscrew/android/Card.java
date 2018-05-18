@@ -1,21 +1,9 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android;
 
 /**
- * Created by Jackie on 17-08-13.
- *
- *  Name: Yaeeun Jeon
- *  PennKey: yje
- *  Recitation: 201
- *
- *  Name: Jacqueline Peng
- *  PennKey: pengja
- *  Recitation: 212
- *
- *  Execution: java Card
- *
- *  This Card class creates
- *  objects that represent cards
- *  in a deck
+ * This Card class creates
+ * objects that represent cards
+ * in a deck
  */
 
 public class Card {

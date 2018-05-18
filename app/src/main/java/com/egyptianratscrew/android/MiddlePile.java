@@ -1,24 +1,11 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android;
 
 import java.util.LinkedList;
 
 /**
- * Created by Jackie on 17-08-13.
- *
- *
- *  Name: Yaeeun Jeon
- *  PennKey: yje
- *  Recitation: 201
- *
- *  Name: Jacqueline Peng
- *  PennKey: pengja
- *  Recitation: 212
- *
- *  Execution: java MiddlePile
- *
- *  This class can be used to create
- *  the middle pile object in the game
- *  Egyptian Rat Screw
+ * This class can be used to create
+ * the middle pile object in the game
+ * Egyptian Rat Screw
  */
 
 public class MiddlePile {

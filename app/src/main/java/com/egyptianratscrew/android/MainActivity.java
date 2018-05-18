@@ -1,4 +1,4 @@
-package com.example.android.egyptianratscrew;
+package com.egyptianratscrew.android;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +14,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.egyptianratscrew.android.egyptianratscrew.R;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
-
-    // TODO remove card when YOU Win
-
 
     // how many cards does each player have to play
     // start with player one
@@ -405,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
                 numCardsPlayerTwo.bringToFront();
                 if (gameEnd) {
                     burnSlap.bringToFront();
+                    nextCardImage.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -443,7 +442,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                nextCardImage.bringToFront();
+                if (!gameEnd) {
+                    nextCardImage.bringToFront();
+                } else {
+                    burnSlap.bringToFront();
+                }
                 // nothing in the pile
                 if (middlePile.getSize() == 1) {
                     nextCardImage.setVisibility(View.INVISIBLE);
@@ -464,6 +467,10 @@ public class MainActivity extends AppCompatActivity {
                 enableButtons();
                 middleIcon.bringToFront();
                 middleIcon.setImageResource(R.drawable.burn_icon);
+
+                if (gameEnd) {
+                    nextCardImage.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -523,6 +530,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void endGame(String msg) {
+        middleIcon.setVisibility(View.INVISIBLE);
         gameEnd = true;
         disableButtons();
         burnSlap.setText(msg);
@@ -594,6 +602,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+        middleIcon.setVisibility(View.VISIBLE);
+
         String p1Json = sp.getString(getString(R.string.p1_save_preference), null);
         String p2Json = sp.getString(getString(R.string.p2_save_preference), null);
         String midJson = sp.getString(getString(R.string.mid_save_preference), null);
@@ -626,6 +636,7 @@ public class MainActivity extends AppCompatActivity {
         // set middle card image
         int id = sp.getInt(getString(R.string.mid_card_img_id_preference), -1);
         if (id != -1) {
+            nextCardImage.setVisibility(View.VISIBLE);
             nextCardImage.setImageResource(id);
         } else {
             nextCardImage.setVisibility(View.INVISIBLE);
@@ -655,6 +666,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetGame() {
         middleIcon.setImageDrawable(null);
+        middleIcon.setVisibility(View.VISIBLE);
         gameEnd = false;
         initializeDecks();
         playerOneImage.setImageResource(playIndicatorOn);

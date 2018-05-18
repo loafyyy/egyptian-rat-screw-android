@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.example.android.egyptianratscrew.AboutActivity">
+    tools:context="com.egyptianratscrew.android.egyptianratscrew.com.egyptianratscrew.android.AboutActivity">
 
     <TextView
         android:layout_width="wrap_content"
