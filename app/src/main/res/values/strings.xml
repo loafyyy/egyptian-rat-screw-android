@@ -7,18 +7,53 @@
     <string name="play">Play</string>
     <string name="new_game">New Game</string>
     <string name="continue_game">Continue</string>
+    <string name="settings">Settings</string>
+    <string-array name="difficulty_array">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+        <item>Impossible</item>
+    </string-array>
+    <string-array name="deal_speed_array">
+        <item>Slow</item>
+        <item>Medium</item>
+        <item>Fast</item>
+    </string-array>
     <string name="about_game">About</string>
+    <string name="one_player">One Player</string>
+    <string name="two_player">Two Player</string>
     <string name="reset">Reset!</string>
     <string name="save">Saved!</string>
     <string name="menu_home">Home</string>
     <string name="menu_reset">Reset</string>
     <string name="menu_save">Save</string>
+    <string name="menu_help">Help</string>
+    <string name="instructions">Play the modern twist to the classic Egyptian Rat Screw! This fast paced two player game is a matching card game where the goal is to gain all the cards in the deck. Think quick! The cards move fast!
+
+\n\nAt the start of the game, the deck is evenly distributed between the players. Their cards are always face down. At each turn, players take turns placing their card face up on the middle pile.
+
+\n\nSLAP!
+\nTo gain more cards, players slap the deck when there are sandwiches. For example, if player one puts down a 1 of Hearts, player two puts down a 8 of Diamonds, and player one puts down a 1 of Spades then there is a sandwich and player one would take all cards in the pile. Another way to gain cards is with special cards - Ace, Jack, Queen, and King. When one of these are put down, the other player must place down 1 card if it’s an Ace, 2 for Jack, 3 for Queen, and 4 for King. Then the player who put down the special card takes the whole pile. The only way to combat a special card is with another special card.
+
+\n\nBURN!
+\nIf a player slaps incorrectly, then they must burn one card to the bottom of the pile.
+
+\n\nYOU WIN!
+\nA player wins when they have gained all the cards in the deck!
+
+\n\nFeatures:
+\n- The hand icon is for slapping
+\n- The play icon is for playing a card
+\n- Vertical display to make it easier for two players to use the phone
+\n- Reset at any point of the game
+\n- Save the game to continue later</string>
     <string name="p1_slaps">SLAP!</string>
     <string name="p1_burn">BURN!</string>
     <string name="p2_slaps">SLAP!</string>
     <string name="p2_burn">BURN!</string>
     <string name="p1_wins_message">YOU\nWIN!</string>
     <string name="p2_wins_message">YOU\nWIN!</string>
+    <string name="p1_loses_message">YOU\nLOSE!</string>
 
     <!-- preferences -->
     <string name="preference_file_key">com.example.android.egyptianratscrew.PREFERENCES</string>
@@ -31,5 +66,9 @@
     <string name="p1_face_card_preference">p1Fc</string>
     <string name="p2_face_card_preference">p2Fc</string>
     <string name="mid_card_img_id_preference">resID</string>
+    <string name="game_mode_preference">game_mode_preference</string>
+    <string name="game_mode_save_preference">one_player_save</string>
+    <string name="difficulty_preference">difficulty_preference</string>
+    <string name="deal_speed_preference">deal_speed_preference</string>
 </resources>
 

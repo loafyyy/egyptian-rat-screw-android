@@ -1,15 +1,19 @@
 package com.egyptianratscrew.android;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private int playIndicatorOff = R.drawable.card;
 
     private ImageButton p1PlayButton, p2PlayButton, p1SlapButton, p2SlapButton;
+    private Button helpButton;
 
     private ViewGroup rootView;
 
@@ -57,14 +62,28 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private boolean gameEnd;
 
+    private boolean onePlayer;
+
+    // timer for computer for 1 player mode
+    private CountDownTimer slapTimer = null;
+    private int slapTime;
+    private CountDownTimer playTimer = null;
+    private int playTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gson = new Gson();
         mContext = this;
         gameEnd = false;
+        slapTime = sp.getInt(getString(R.string.difficulty_preference), SettingsActivity.EASY_COMP);
+        playTime = sp.getInt(getString(R.string.deal_speed_preference), SettingsActivity.SLOW_DEAL);
+
+        // VIEWS
+        rootView = (ViewGroup) findViewById(R.id.rootLayout);
 
         // initialize the images for the piles
         playerOneImage = (ImageView) findViewById(R.id.player_one_card);
@@ -85,19 +104,96 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize buttons
         p1PlayButton = (ImageButton) findViewById(R.id.p1_play);
+        p1PlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerOnePlay();
+            }
+        });
         p2PlayButton = (ImageButton) findViewById(R.id.p2_play);
+        p2PlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerTwoPlay();
+            }
+        });
         p1SlapButton = (ImageButton) findViewById(R.id.p1_slap);
+        p1SlapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerOneSlap();
+            }
+        });
         p2SlapButton = (ImageButton) findViewById(R.id.p2_slap);
+        p2SlapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerTwoSlap();
+            }
+        });
 
-        rootView = (ViewGroup) findViewById(R.id.rootLayout);
+        helpButton = findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // custom dialog
+                final Dialog dialog = new Dialog(mContext);
+                dialog.setTitle("Instructions");
+                dialog.setContentView(R.layout.instructions);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                dialog.show();
+                dialog.getWindow().setAttributes(lp);
 
-        sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialog_ok);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
-        boolean newGame = getIntent().getBooleanExtra(getString(R.string.new_game_preference), false);
+                dialog.show();
+            }
+        });
+
+        // one player settings
+        onePlayer = getIntent().getBooleanExtra(getString(R.string.game_mode_preference), false);
+
+        boolean newGame = getIntent().getBooleanExtra(getString(R.string.new_game_preference), true);
         if (newGame) {
             resetGame();
         } else {
             loadData();
+        }
+
+        if (onePlayer) {
+            slapTimer = new CountDownTimer(slapTime, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    playerTwoSlap();
+                }
+            };
+
+            playTimer = new CountDownTimer(playTime, 1000) {
+                @Override
+                public void onTick(long l) {
+                }
+
+                @Override
+                public void onFinish() {
+                    playerTwoPlay();
+                }
+            };
+
+            // get rid of player two play and slap buttons
+            p2PlayButton.setVisibility(View.GONE);
+            p2SlapButton.setVisibility(View.GONE);
         }
     }
 
@@ -119,7 +215,11 @@ public class MainActivity extends AppCompatActivity {
         saveData();
     }
 
-    public void playerOneSlap(View view) {
+    public void playerOneSlap() {
+
+        if (onePlayer) {
+            slapTimer.cancel();
+        }
 
         burnSlap.setText("");
         middleIcon.setImageDrawable(null);
@@ -165,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         updateNumCards();
     }
 
-    public void playerTwoSlap(View view) {
+    public void playerTwoSlap() {
 
         burnSlap.setText("");
         middleIcon.setImageDrawable(null);
@@ -208,9 +308,15 @@ public class MainActivity extends AppCompatActivity {
             moveCardToCenterBurn(playerTwoImage, false);
         }
         updateNumCards();
+
+        if (onePlayer) {
+            if (playerTwoPlays != 0) {
+                playTimer.start();
+            }
+        }
     }
 
-    public void playerOnePlay(View view) {
+    public void playerOnePlay() {
 
         burnSlap.setText("");
         middleIcon.setImageDrawable(null);
@@ -282,10 +388,20 @@ public class MainActivity extends AppCompatActivity {
             }
             // update text field that display deck sizes
             updateNumCards();
+
+            if (onePlayer) {
+                if (middlePile.shouldSlap()) {
+                    slapTimer.start();
+                }
+
+                else if (playerTwoPlays != 0) {
+                    playTimer.start();
+                }
+            }
         }
     }
 
-    public void playerTwoPlay(View view) {
+    public void playerTwoPlay() {
 
         burnSlap.setText("");
         middleIcon.setImageDrawable(null);
@@ -356,6 +472,14 @@ public class MainActivity extends AppCompatActivity {
             }
             // update text field that display deck sizes
             updateNumCards();
+
+            if (onePlayer) {
+                if (middlePile.shouldSlap()) {
+                    slapTimer.start();
+                } else if (playerTwoPlays != 0) {
+                    playTimer.start();
+                }
+            }
         }
     }
 
@@ -533,7 +657,19 @@ public class MainActivity extends AppCompatActivity {
         middleIcon.setVisibility(View.INVISIBLE);
         gameEnd = true;
         disableButtons();
-        burnSlap.setText(msg);
+
+        if (onePlayer) {
+            burnSlap.setRotation(0);
+            if (playerOne.getSize() == 0) {
+                burnSlap.setText(getString(R.string.p1_loses_message));
+            }
+            else {
+                burnSlap.setText(R.string.p1_wins_message);
+            }
+        }
+        else {
+            burnSlap.setText(msg);
+        }
     }
 
     private void disableButtons() {
@@ -584,6 +720,13 @@ public class MainActivity extends AppCompatActivity {
         String p2Json = gson.toJson(playerTwo);
         String midJson = gson.toJson(middlePile);
 
+        // put one player or two player
+        if (onePlayer) {
+            editor.putBoolean(getString(R.string.game_mode_save_preference), true);
+        } else {
+            editor.putBoolean(getString(R.string.game_mode_save_preference), false);
+        }
+
         editor.putString(getString(R.string.p1_save_preference), p1Json);
         editor.putString(getString(R.string.p2_save_preference), p2Json);
         editor.putString(getString(R.string.mid_save_preference), midJson);
@@ -613,6 +756,9 @@ public class MainActivity extends AppCompatActivity {
             resetGame();
             return;
         }
+
+        // get one player or two player mode
+        onePlayer = sp.getBoolean(getString(R.string.game_mode_save_preference), true);
 
         playerOne = gson.fromJson(p1Json, PlayerDeck.class);
         playerTwo = gson.fromJson(p2Json, PlayerDeck.class);
@@ -649,6 +795,7 @@ public class MainActivity extends AppCompatActivity {
         if (p1Size == 0 || p2Size == 0) {
             // p2 wins
             if (p1Size == 0) {
+                burnSlap.setRotation(180);
                 endGame(getString(R.string.p2_wins_message));
             }
             // p1 wins

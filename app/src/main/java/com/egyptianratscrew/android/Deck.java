@@ -1,5 +1,6 @@
 package com.egyptianratscrew.android;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -70,19 +71,7 @@ public class Deck {
      * to a new random index in the linked list.
      */
     public void shuffleDeck() {
-
-        // shuffle the deck by changing the placement of each card
-        for (int i = 0; i < 52; i++) {
-            // generates random integer from 0 - 50
-            // this represents the new position of the card
-            int randomIdx = (int) (51 * Math.random());
-
-            // get the card
-            Card card = deck.remove(i);
-
-            // add card to random index
-            deck.add(randomIdx, card);
-        }
+        Collections.shuffle(deck);
     }
 
     /* Input: void
