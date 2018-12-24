@@ -28,12 +28,12 @@
     <string name="menu_reset">Reset</string>
     <string name="menu_save">Save</string>
     <string name="menu_help">Help</string>
-    <string name="instructions">Play the modern twist to the classic Egyptian Rat Screw! This fast paced two player game is a matching card game where the goal is to gain all the cards in the deck. Think quick! The cards move fast!
+    <string name="instructions">Play the modern twist to the classic Egyptian Rat Screw! This fast-paced one or two-player game is a matching card game where the goal is to gain all the cards in the deck. Think quick! The cards move fast!
 
 \n\nAt the start of the game, the deck is evenly distributed between the players. Their cards are always face down. At each turn, players take turns placing their card face up on the middle pile.
 
 \n\nSLAP!
-\nTo gain more cards, players slap the deck when there are sandwiches. For example, if player one puts down a 1 of Hearts, player two puts down a 8 of Diamonds, and player one puts down a 1 of Spades then there is a sandwich and player one would take all cards in the pile. Another way to gain cards is with special cards - Ace, Jack, Queen, and King. When one of these are put down, the other player must place down 1 card if it’s an Ace, 2 for Jack, 3 for Queen, and 4 for King. Then the player who put down the special card takes the whole pile. The only way to combat a special card is with another special card.
+\nTo gain more cards, players slap the deck when there are sandwiches or doubles. For example, if player one puts down a 5 of Hearts, player two puts down an 8 of Diamonds, and player one puts down a 5 of Spades then there is a sandwich (5-8-5). Two consecutive cards of the same value (i.e. a double) can also be "slapped". Another way to gain cards is with special cards - Ace, Jack, Queen, and King. When one of these are put down, the other player must place down 4 cards if it’s an Ace, 1 for Jack, 2 for Queen, and 3 for King. Then the player who put down the special card takes the whole pile. The only way to combat a special card is with another special card.
 
 \n\nBURN!
 \nIf a player slaps incorrectly, then they must burn one card to the bottom of the pile.
@@ -46,7 +46,8 @@
 \n- The play icon is for playing a card
 \n- Vertical display to make it easier for two players to use the phone
 \n- Reset at any point of the game
-\n- Save the game to continue later</string>
+\n- Save the game to continue later
+\n- New! One-player mode - use the Settings page on the home screen to adjust the difficulty!</string>
     <string name="p1_slaps">SLAP!</string>
     <string name="p1_burn">BURN!</string>
     <string name="p2_slaps">SLAP!</string>

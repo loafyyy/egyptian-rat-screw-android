@@ -24,10 +24,10 @@ public class SettingsActivity extends AppCompatActivity {
     public static final int MED_DEAL = 1200;
     public static final int FAST_DEAL = 800;
 
-    public static final int EASY_COMP = 2000;
-    public static final int MED_COMP = 1000;
-    public static final int HARD_COMP = 500;
-    public static final int IMPOSSIBLE_COMP = 200;
+    public static final int EASY_COMP = 3000;
+    public static final int MED_COMP = 1750;
+    public static final int HARD_COMP = 1000;
+    public static final int IMPOSSIBLE_COMP = 500;
 
 
     @Override
@@ -88,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
                 sp.edit().putInt(getString(R.string.deal_speed_preference), dealSpeed).apply();
-                Toast.makeText(mContext, "" + dealSpeed, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(mContext, "" + dealSpeed, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -119,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
                 sp.edit().putInt(getString(R.string.difficulty_preference), computerSpeed).apply();
-                Toast.makeText(mContext, "" + computerSpeed, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "" + computerSpeed, Toast.LENGTH_SHORT).show();
             }
 
             @Override
