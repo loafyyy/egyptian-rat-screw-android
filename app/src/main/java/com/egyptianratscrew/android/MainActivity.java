@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -252,15 +253,15 @@ public class MainActivity extends AppCompatActivity {
 
         // if the slap was incorrect
         else {
-            // p1 runs out of cards - player two wins
-            if (playerOne.getSize() <= 1) {
-                burnSlap.setRotation(180);
-                endGame(getString(R.string.p2_wins_message));
-            }
-
             // burn player one's next card
             middlePile.burn(playerOne.playTopCard());
             moveCardToCenterBurn(playerOneImage, true);
+
+            // p1 runs out of cards - player two wins
+            if (playerOne.getSize() == 0) {
+                burnSlap.setRotation(180);
+                endGame(getString(R.string.p2_wins_message));
+            }
         }
         updateNumCards();
     }
@@ -298,14 +299,15 @@ public class MainActivity extends AppCompatActivity {
 
         // if the slap was incorrect
         else {
-            // p2 runs out of cards - player one wins
-            if (playerTwo.getSize() <= 1) {
-                burnSlap.setRotation(0);
-                endGame(getString(R.string.p1_wins_message));
-            }
             // burn player two's next card
             middlePile.burn(playerTwo.playTopCard());
             moveCardToCenterBurn(playerTwoImage, false);
+
+            // p2 runs out of cards - player one wins
+            if (playerTwo.getSize() == 0) {
+                burnSlap.setRotation(0);
+                endGame(getString(R.string.p1_wins_message));
+            }
         }
         updateNumCards();
 
@@ -323,12 +325,6 @@ public class MainActivity extends AppCompatActivity {
 
         // player one can only play when it's his/her turn
         if (playerOnePlays != 0) {
-
-            // player two wins
-            if (playerOne.getSize() <= 1) {
-                burnSlap.setRotation(180);
-                endGame(getString(R.string.p2_wins_message));
-            }
 
             Card nextCard = playerOne.playTopCard();
             middlePile.addCard(nextCard);
@@ -389,7 +385,13 @@ public class MainActivity extends AppCompatActivity {
             // update text field that display deck sizes
             updateNumCards();
 
-            if (onePlayer) {
+            // player two wins
+            if (playerOne.getSize() == 0) {
+                burnSlap.setRotation(180);
+                endGame(getString(R.string.p2_wins_message));
+            }
+
+            else if (onePlayer) {
                 if (middlePile.shouldSlap()) {
                     slapTimer.start();
                 }
@@ -408,12 +410,6 @@ public class MainActivity extends AppCompatActivity {
 
         // player two can only play when it's his/her turn
         if (playerTwoPlays != 0) {
-
-            // player one wins
-            if (playerTwo.getSize() <= 1) {
-                burnSlap.setRotation(0);
-                endGame(getString(R.string.p1_wins_message));
-            }
 
             Card nextCard = playerTwo.playTopCard();
             middlePile.addCard(nextCard);
@@ -473,7 +469,13 @@ public class MainActivity extends AppCompatActivity {
             // update text field that display deck sizes
             updateNumCards();
 
-            if (onePlayer) {
+            // player one wins
+            if (playerTwo.getSize() == 0) {
+                burnSlap.setRotation(0);
+                endGame(getString(R.string.p1_wins_message));
+            }
+
+            else if (onePlayer) {
                 if (middlePile.shouldSlap()) {
                     slapTimer.start();
                 } else if (playerTwoPlays != 0) {
@@ -657,6 +659,7 @@ public class MainActivity extends AppCompatActivity {
         middleIcon.setVisibility(View.INVISIBLE);
         gameEnd = true;
         disableButtons();
+        updateNumCards();
 
         if (onePlayer) {
             burnSlap.setRotation(0);
@@ -793,6 +796,7 @@ public class MainActivity extends AppCompatActivity {
         int p1Size = playerOne.getSize();
         int p2Size = playerTwo.getSize();
         if (p1Size == 0 || p2Size == 0) {
+            nextCardImage.setVisibility(View.INVISIBLE);
             // p2 wins
             if (p1Size == 0) {
                 burnSlap.setRotation(180);

@@ -25,10 +25,12 @@ public class SettingsActivity extends AppCompatActivity {
     public static final int FAST_DEAL = 800;
 
     public static final int EASY_COMP = 3000;
-    public static final int MED_COMP = 1750;
-    public static final int HARD_COMP = 1000;
+    public static final int MED_COMP = 1500;
+    public static final int HARD_COMP = 800;
     public static final int IMPOSSIBLE_COMP = 500;
 
+    private int lastDealSpeed;
+    private int lastComputerSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         computerDifficultySpinner = findViewById(R.id.computer_difficulty_spinner);
 
         int dealSpeedPref = sp.getInt(getString(R.string.deal_speed_preference), SLOW_DEAL);
+        lastDealSpeed = dealSpeedPref;
         switch (dealSpeedPref) {
             case SLOW_DEAL:
                 dealSpeedSpinner.setSelection(0);
@@ -54,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         int compDiffPref = sp.getInt(getString(R.string.difficulty_preference), EASY_COMP);
+        lastComputerSpeed = compDiffPref;
         switch (compDiffPref) {
             case EASY_COMP:
                 computerDifficultySpinner.setSelection(0);
@@ -88,7 +92,11 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
                 sp.edit().putInt(getString(R.string.deal_speed_preference), dealSpeed).apply();
-                // Toast.makeText(mContext, "" + dealSpeed, Toast.LENGTH_SHORT).show();
+
+                if (dealSpeed != lastDealSpeed) {
+                    Toast.makeText(mContext, "Deal speed set to " + dealSpeed + " ms/card", Toast.LENGTH_SHORT).show();
+                    lastDealSpeed = dealSpeed;
+                }
             }
 
             @Override
@@ -101,25 +109,35 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int computerSpeed;
+                String computerDifficulty = "";
                 switch (i) {
                     case 0:
                         computerSpeed = EASY_COMP;
+                        computerDifficulty = "easy";
                         break;
                     case 1:
                         computerSpeed = MED_COMP;
+                        computerDifficulty = "medium";
                         break;
                     case 2:
                         computerSpeed = HARD_COMP;
+                        computerDifficulty = "hard";
                         break;
                     case 3:
                         computerSpeed = IMPOSSIBLE_COMP;
+                        computerDifficulty = "impossible";
                         break;
                     default:
                         computerSpeed = EASY_COMP;
+                        computerDifficulty = "easy";
                         break;
                 }
                 sp.edit().putInt(getString(R.string.difficulty_preference), computerSpeed).apply();
-                //Toast.makeText(mContext, "" + computerSpeed, Toast.LENGTH_SHORT).show();
+
+                if (computerSpeed != lastComputerSpeed) {
+                    Toast.makeText(mContext, "Computer difficulty set to " + computerDifficulty, Toast.LENGTH_SHORT).show();
+                    lastComputerSpeed = computerSpeed;
+                }
             }
 
             @Override
