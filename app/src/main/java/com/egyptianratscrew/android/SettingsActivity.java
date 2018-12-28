@@ -21,11 +21,11 @@ public class SettingsActivity extends AppCompatActivity {
     private Context mContext;
 
     public static final int SLOW_DEAL = 2000;
-    public static final int MED_DEAL = 1200;
-    public static final int FAST_DEAL = 800;
+    public static final int MED_DEAL = 1250;
+    public static final int FAST_DEAL = 1100;
 
     public static final int EASY_COMP = 3000;
-    public static final int MED_COMP = 1500;
+    public static final int MED_COMP = 1000;
     public static final int HARD_COMP = 800;
     public static final int IMPOSSIBLE_COMP = 500;
 
